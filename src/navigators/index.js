@@ -7,6 +7,7 @@ import { connect } from 'react-redux'
 import LoginScreen from '../containers/login'
 import HomeScreen from '../containers/home'
 import ProjectScreen from '../containers/projects'
+import ProjectEdit from '../containers/projectedit'
 import WorkItemScreen from '../containers/workItems'
 import DrawerButton from '../components/drawerButton'
 import DrawerView from '../components/drawerView'
@@ -31,6 +32,9 @@ const HomeNavigator = StackNavigator({
 const ProjectNavigator = StackNavigator({ 
   Projects: {
     screen: ProjectScreen,
+  },
+  ProjectEdit: {
+    screen: ProjectEdit,
   },
   WorkItems: {
     screen: WorkItemScreen

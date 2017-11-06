@@ -4,69 +4,53 @@ import { View, Text, Button, FlatList, AsyncStorage } from 'react-native'
 import { connect } from 'react-redux'
 import { NavigationActions } from 'react-navigation'
 import DrawerButton from '../components/drawerButton'
-import vsts from '../api/common'
-import firebase from '../api/firebase'
-
+import ProjectCard from '../components/projectcard'
 
 class HomeScreen extends React.PureComponent {
   constructor (props) {
     super(props)
-    var self = this
-    this.itemRef = firebase.database().ref()
     this.state = {
+      refreshing: false,
       data: []
     }
-    firebase.database().ref('projects/').once('value').then(function(snapshot) {
-      var data = []
-      snapshot.forEach(child => {
-        data.push({
-          id: child.key,
-          name: child.val().name
-        })
-      })
-      self.setState({
-        data
-      })
-    })
-
   }
   static navigationOptions = ({navigation}) => ({
     drawerLabel: 'Home',
     headerTitle: 'Home',
     headerLeft: <DrawerButton navigation={navigation} />,
   })
-  async componentDidMount () {
+  async componentWillMount () {
     try {
-      this.listenForItems(this.itemRef)
-      const value = await AsyncStorage.getItem('@TFSExplorer:auth');
-      if (value !== null){
-        this.props.store(value)
-        vsts.setToken(value)
-        console.log(value);
-
+      const projectIds = await AsyncStorage.getItem('project-stat')
+      if (projectIds) {
+        const ids = JSON.parse(projectIds)
+        let items = []
+        for (var index = 0; index < ids.length; index++) {
+          const element = ids[index]
+          const item = await AsyncStorage.getItem(`p:${element}`)
+          items.push(JSON.parse(item))
+        }
+        this.setState({ data: items })
       } else {
-
-        this.props.navigation.navigate('Login')
+        await this._fetchData()
       }
     } catch (error) {
       console.log(error)
     }
   }
-  listenForItems = (itemRef) => {
-    console.log('here inside')
-    var self = this
-
-    firebase.database().ref('projects/').on('value', (snap) => {
-      var items = []
-      snap.forEach(item => {
-        items.push({
-          id: item.key,
-          name: item.val().name
-        })
-      })
-      console.log(items)
-      self.setState({ data: items })
-    })
+  _fetchData = async () => {
+    const response = await fetch('http://ci.lolobyte.com/api/projects/statistic')
+    const result = await response.json()
+    if (result.success) {
+      let ids = []
+      for (var index = 0; index < result.data.length; index++) {
+        const element = result.data[index]
+        ids.push(element._id)
+        await AsyncStorage.setItem(`p:${element._id}`, JSON.stringify(element))
+      }
+      await AsyncStorage.setItem('project-stat', JSON.stringify(ids))
+      this.setState({ data: result.data })
+    }
   }
   render () {
 
@@ -74,7 +58,9 @@ class HomeScreen extends React.PureComponent {
         <FlatList
           data={this.state.data}
           keyExtractor={(item, index) => index}
-          renderItem={({item}) => (<Text>{item.name}</Text>)}
+          renderItem={({item}) => (<ProjectCard item={item}></ProjectCard>)}
+          onRefresh={async () => await this._fetchData()}
+          refreshing={this.state.refreshing}
         />
     )
   }

@@ -11,10 +11,8 @@ import Icon from 'react-native-vector-icons/MaterialIcons'
 
 const style = StyleSheet.create({
   view: {
-    paddingTop: 10,
-    paddingBottom: 10,
-    paddingLeft: 10,
-    paddingRight: 10
+    flex: 1,
+    flexDirection: 'row'
   },
   title: {
     flex: 3,
@@ -29,9 +27,7 @@ const style = StyleSheet.create({
     fontSize: 14,
     color: 'white',
     paddingHorizontal: 10,
-    borderRadius: 10,
-    backgroundColor: 'skyblue'
-
+    borderRadius: 10
   },
   rightSwipeButton: {
     flex: 1,
@@ -40,7 +36,7 @@ const style = StyleSheet.create({
   }
 })
 
-export default ({ item, onPress, onOpen, onClose }) => (
+export default ({ item, onPress, onOpen, onClose, onCloseProject }) => (
   <Swipeable
     leftContent={(
       <Text>Pull to activate</Text>
@@ -49,18 +45,19 @@ export default ({ item, onPress, onOpen, onClose }) => (
       <TouchableHighlight
         underlayColor='yellow'
         onPress={onPress}
-        style={[style.rightSwipeButton, { backgroundColor: 'lightyellow' }]}>
+        style={[style.rightSwipeButton, { backgroundColor: 'yellow' }]}>
         <Icon
-          name='playlist-play'
+          name='mode-edit'
           size={28}
           color='black'
         />
       </TouchableHighlight>,
       <TouchableHighlight 
         underlayColor='green'
-        style={[style.rightSwipeButton, { backgroundColor: 'lightgreen' }]}>
+        onPress={onCloseProject}
+        style={[style.rightSwipeButton, { backgroundColor: 'red' }]}>
         <Icon
-          name="playlist-add-check"
+          name="close"
           size={28}
           color='white'
         />
@@ -70,19 +67,12 @@ export default ({ item, onPress, onOpen, onClose }) => (
     onRightButtonsCloseRelease={onClose}
     >
     <View style={style.view}>
-      <View style={{ flex:1, flexDirection: 'row' }}>
+      <View style={ { backgroundColor: item.status === 'closed' ? 'red' : 'green', width: 7, marginRight: 10 }}/>
+      <View style={{paddingVertical: 15, paddingHorizontal: 5, flex:1, flexDirection: 'row' }}>
         <Text style={style.title}>
           {item.name}
         </Text>
-        <View style={style.workCount}>
-          <Text style={style.workCountText}>
-            {item.workCount}
-          </Text>
-        </View>
       </View>
-      <Text>
-        {item.description}
-      </Text>
     </View>
   </Swipeable>
 
