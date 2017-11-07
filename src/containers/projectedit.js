@@ -9,6 +9,7 @@ class ProjectEdit extends React.Component {
   constructor() {
     super()
     this.state = {
+      loading: false,
       project: {},
       iterations: [],
       repos: []
@@ -26,30 +27,50 @@ class ProjectEdit extends React.Component {
     }
   }
 
+  _onWorkItemPress = async (id) => {
+    try {
+      this.setState( { loading: true })
+      var response = await fetch(`http://ci.lolobyte.com/api/vsts/${id}/workitems`)
+      var result = await response.json()
+      if (result.success) {
+        await AsyncStorage.removeItem(`project-stat`)
+      }      
+    } catch (error) { }
+    this.setState( { loading: false })
+  }
   _onReloadPress = async (id) => {
-    console.log('tfs id', id)
-    var response = await fetch(`http://ci.lolobyte.com/api/vsts/${id}/workitems`)
-    var result = await response.json()
-    console.log(result.success)
-    if (result.success) {
-      console.log('I am done')
-      await AsyncStorage.setItem(`project-stat`, null)
+    try {
+      this.setState( { loading: true })
+      var response = await fetch(`http://ci.lolobyte.com/api/vsts/project/${id}/import`)
+      var result = await response.json()
+      if (result.success) {
+        await AsyncStorage.removeItem(`project-stat`)
+      }
+    } catch (error) {
+      
     }
+    this.setState( { loading: false })
   }
   _onReleasePress = async (id, index) => {
-    var response = await fetch(`http://ci.lolobyte.com/api/projects/${id}/release`, {
-      method: 'patch',
-      headers: { 'Content-Type': 'application/json' }
-    })
-    var result = await response.json()
-    if (result.success) {
-      const items = _.cloneDeep(this.state.iterations)
-      items[index].status = 'released'
-      const project = _.cloneDeep(this.state.project)
-      project.iterations[index] = items[index]
-      this.setState({ project, iterations: items })
-      await AsyncStorage.setItem(`p:${this.props.project}`, JSON.stringify(project))
+    try {
+      this.setState( { loading: true })
+      var response = await fetch(`http://ci.lolobyte.com/api/projects/${id}/release`, {
+        method: 'patch',
+        headers: { 'Content-Type': 'application/json' }
+      })
+      var result = await response.json()
+      if (result.success) {
+        const items = _.cloneDeep(this.state.iterations)
+        items[index].status = 'released'
+        const project = _.cloneDeep(this.state.project)
+        project.iterations[index] = items[index]
+        this.setState({ project, iterations: items })
+        await AsyncStorage.setItem(`p:${this.props.project}`, JSON.stringify(project))
+      }
+    } catch (error) {
+      
     }
+    this.setState( { loading: false })
   }
   render () {
     return (
@@ -60,19 +81,37 @@ class ProjectEdit extends React.Component {
               {this.state.project.name}
             </Text>
             <View style={{ flex: 1, alignItems: 'flex-end' }}>
-              <TouchableHighlight onPress={async () => { await this._onReloadPress(this.state.project.tfs_id) }}>
-                <View>
-                  <Icon
-                    name='cached'
-                    size={24}
-                    color='gray' />
-                </View>
-              </TouchableHighlight>
+              
+                {
+                  this.state.loading === false ?
+                  (
+                  <View style={{ flex: 1, flexDirection: 'row' }}>
+                    <TouchableHighlight style={{ marginRight: 10 }} onPress={async () => { await this._onWorkItemPress(this.state.project.tfs_id) }}>
+                    <View>
+                      <Icon
+                        name='repeat'
+                        size={24}
+                        color='gray' />
+                    </View>
+                  </TouchableHighlight>
+                  <TouchableHighlight onPress={async () => { await this._onReloadPress(this.state.project.tfs_id) }}>
+                    <View>
+                      <Icon
+                        name='cached'
+                        size={24}
+                        color='gray' />
+                    </View>
+                  </TouchableHighlight>
+                  </View>
+                  ) :
+                  <ActivityIndicator />
+                }
+              
             </View>
           </View>
 
           
-          <View>
+          <View style={{ marginTop: 5, marginBottom: 10 }}>
             <Text style={{ fontSize: 12 }}>
               {this.state.project.description}
             </Text>
@@ -106,7 +145,7 @@ class ProjectEdit extends React.Component {
                             <Icon
                             name='check-box'
                             size={24}
-                            color='gray' />
+                            color='#5f5' />
                     }
                       
                     </View>

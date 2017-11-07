@@ -27,7 +27,7 @@ const style = StyleSheet.create({
   },
   workCount: {
     flex: 1,
-    alignItems: 'flex-end',
+    alignItems: 'flex-end'
   },
   workCountText: {    
     fontSize: 14,
@@ -55,16 +55,13 @@ export default ({ item, onPress, onOpen, onClose }) => (
         </Text>
       </View>
     </View>
-    <Text>
-      {item.description}
-    </Text>
     <View style={{ borderColor: '#ddd', borderBottomWidth: 1, marginVertical: 10 }} />
     {
-      item.members.map(m => {
+      item.members.filter(m => !(m.taskActive === 0 && m.taskClosed === 0 && m.taskCount === 0)).map(m => {
         return (
           <View style={{ margin: 1, paddingHorizontal: 15 }} key={m._id}>
             <View style={{ flex:1, flexDirection: 'row' }}>
-              <View style={{ backgroundColor: m.taskCount === 0 ? 'lightgreen' : m.taskCount > 0 && m.taskActive === 0 ? 'yellow' : 'blue', padding: 4, width: 22, height: 22, borderRadius: 30, marginRight: 5 }}>
+              <View style={{ backgroundColor: m.taskCount === 0 ? 'lightgreen' : m.taskCount > 0 && m.taskActive === 0 ? 'yellow' : 'lightblue', padding: 4, width: 22, height: 22, borderRadius: 30, marginRight: 5 }}>
                 <Icon
                   name='check'
                   size={14}
@@ -75,10 +72,17 @@ export default ({ item, onPress, onOpen, onClose }) => (
                 {m.displayName}
               </Text>
               <View style={style.workCount}>
-                
-                <Text style={[style.workCountText, { paddingVertical: 3 }]}>
-                  {m.taskCount}/{m.taskActive}/{m.taskClosed}
-                </Text>
+                <View style={{ flex: 1, flexDirection: 'row' }}>
+                  <Text style={[style.workCountText, { width: 48, paddingVertical: 3, marginHorizontal: 3, backgroundColor: 'lightgreen', textAlign: 'center' }]}>
+                    {m.taskCount}
+                  </Text>
+                  <Text style={[style.workCountText, { width: 48, paddingVertical: 3, marginHorizontal: 3, backgroundColor: 'lightblue', textAlign: 'center' }]}>
+                    {m.taskActive}
+                  </Text>
+                  <Text style={[style.workCountText, { width: 48, paddingVertical: 3, marginHorizontal: 3, textAlign: 'center' }]}>
+                    {m.taskClosed}
+                  </Text>
+                </View>
               </View> 
             </View>
            
@@ -96,15 +100,20 @@ export default ({ item, onPress, onOpen, onClose }) => (
                 <Text style={{ fontWeight:'bold' }}>
                   {it.name}
                 </Text>
-                <Text style={{ marginVertical: 2, fontSize: 12, color:  moment(it.finishDate).diff(moment(), 'days') >= 0 ? 'green' : 'red'}}>
+                <Text style={{ marginVertical: 2, fontSize: 12, color:  moment(it.finishDate).diff(moment(), 'days') >= 0 ? '#5f5' : '#f55'}}>
                   {moment(it.startDate).format('DD-MMM-YYYY')} - {moment(it.finishDate).format('DD-MMM-YYYY')}
                 </Text>
                 
               </View>
               <View style={style.workCount}>
-                <Text style={[style.workCountText, { paddingVertical: 10 }]}>
-                  {moment(it.finishDate).diff(moment(), 'days')}/{it.taskCount}
-                </Text>
+                <View style={{ flex: 1, flexDirection: 'row' }}>
+                  <Text style={[style.workCountText, { width: 48, marginHorizontal: 3, textAlign: 'center', textAlignVertical: 'center' }]}>
+                    {moment(it.finishDate).diff(moment(), 'days')}
+                  </Text>
+                  <Text style={[style.workCountText, { width: 48, marginHorizontal: 3, textAlign: 'center', textAlignVertical: 'center' }]}>
+                    {it.taskCount}
+                  </Text>
+                </View>
               </View>
             </View>
           </View>
