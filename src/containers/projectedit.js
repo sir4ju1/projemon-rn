@@ -72,6 +72,10 @@ class ProjectEdit extends React.Component {
     }
     this.setState( { loading: false })
   }
+  _onRepoEditPressed = (id) => {
+    this.props.setRepo(id)
+    this.props.navigation.navigate('RepoEdit')
+  }
   render () {
     return (
       <ScrollView>
@@ -169,7 +173,7 @@ class ProjectEdit extends React.Component {
                       {re.name}
                     </Text>
                     <View style={{ flex: 1, alignItems: 'flex-end' }}>
-                      <TouchableHighlight onPress={()=>{}}>
+                      <TouchableHighlight onPress={()=>{ this._onRepoEditPressed(re._id) }}>
                           <View>
                             <Icon
                               name='mode-edit'
@@ -194,5 +198,7 @@ const mapStateToProps = state => ({
   isLoggedIn: state.auth.isLoggedIn,
   project: state.app.currentProject
 })
-
-export default connect(mapStateToProps)(ProjectEdit)
+const mapDispatchtoProps = dispatch => ({
+  setRepo: (repo) => dispatch({type: 'Repo', repo })
+})
+export default connect(mapStateToProps, mapDispatchtoProps)(ProjectEdit)

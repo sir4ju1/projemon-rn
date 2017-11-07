@@ -9,6 +9,8 @@ function app(state = initialAppState, action) {
   switch(action.type) {
     case 'WorkItems':
       return { ...state, currentProject: action.project, member: action.member, iteration: action.iteration, workIds: action.workIds }
+    case 'Repo':
+      return { ...state, repo: action.repo }
     default:
       return state
   }
