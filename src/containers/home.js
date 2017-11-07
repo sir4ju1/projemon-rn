@@ -52,13 +52,30 @@ class HomeScreen extends React.PureComponent {
       this.setState({ data: result.data })
     }
   }
+  _onClosedStoriesPressed = (tfsId) => {
+    this.props.setWorkIds(tfsId)
+    this.props.navigation.navigate('WorkItemState')
+  }
+  _onMemberWitPressed = (tfsId, member) => {
+    this.props.setMemberWorkIds(tfsId,`${member.displayName} <${member.uniqueName}>`)
+    this.props.navigation.navigate('WorkItemMember')
+  }
+  _onIterationWitPressed = (tfsId, iteration) => {
+    this.props.setIterationWorkIds(tfsId, iteration)
+    this.props.navigation.navigate('WorkItemIteration')
+  }
   render () {
 
     return (
         <FlatList
           data={this.state.data}
           keyExtractor={(item, index) => index}
-          renderItem={({item}) => (<ProjectCard item={item}></ProjectCard>)}
+          renderItem={({item}) => (<ProjectCard
+            item={item} 
+            onClosedStoriesPressed={(tfsId) => this._onClosedStoriesPressed(tfsId)}
+            onMemberWitPressed={(tfsId, member) => this._onMemberWitPressed(tfsId, member)}
+            onIterationWitPressed={(tfsId, iteration) => this._onIterationWitPressed(tfsId, iteration)}
+          />)}
           onRefresh={async () => await this._fetchData()}
           refreshing={this.state.refreshing}
         />
@@ -72,6 +89,9 @@ const mapStateToProps = state => ({
 })
 const mapDispatchToProps = dispatch => ({
   store: (token) => dispatch({ type: 'Store', token }),
+  setWorkIds: (project) => dispatch({ type: 'WorkItems', project }),
+  setMemberWorkIds: (project, member) => dispatch({ type: 'WorkItems', project, member }),
+  setIterationWorkIds: (project, iteration) => dispatch({ type: 'WorkItems', project, iteration })
 })
 
 

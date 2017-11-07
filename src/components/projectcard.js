@@ -31,31 +31,33 @@ const style = StyleSheet.create({
   workCountText: {    
     fontSize: 14,
     paddingHorizontal: 10,
-    borderRadius: 10,
+    borderRadius: 5,
     backgroundColor: '#eee'
 
   }
 })
 
-export default ({ item, onPress, onOpen, onClose }) => (
+export default ({ item, onPress, onOpen, onClose, onClosedStoriesPressed, onMemberWitPressed, onIterationWitPressed }) => (
   <View style={style.view}>
     <View style={{ flex:1, flexDirection: 'row', paddingBottom: 10, paddingHorizontal: 10 }}>
       <Text style={[style.title, { paddingVertical: 10 }]}>
         {item.name}
       </Text>
       <View style={style.workCount}>
-        <View style={{ flex: 1, flexDirection: 'row' }}>
-          <TouchableHighlight underlayColor='white' activeOpacity={0.5} onPress={() => { console.log('hi') }} >
-            <Text style={[style.workCountText, { fontSize: 20, width: 56, height: 40, textAlign: 'center', textAlignVertical: 'center' }]} >
-              {item.taskClosed}
-            </Text>
-          </TouchableHighlight>
-          <TouchableHighlight underlayColor='white' activeOpacity={0.5} onPress={() => { console.log('hi') }} >
-            <Text style={[style.workCountText, { fontSize: 20, marginLeft: 5, width: 56, height: 40, textAlign: 'center', textAlignVertical: 'center' }]}>
-              {item.taskCount}
-            </Text>
-          </TouchableHighlight>
-        </View>
+        {
+          item.taskClosed > 0 ?
+            <TouchableHighlight underlayColor='white' activeOpacity={0.5} onPress={() => { onClosedStoriesPressed(item.tfs_id) }} >
+              <Text style={[style.workCountText, { fontSize: 20, width: 56, height: 40, textAlign: 'center', textAlignVertical: 'center' }]} >
+                {item.taskClosed}
+              </Text>
+            </TouchableHighlight>
+          :
+            <Icon
+              style={{ padding: 7}}
+              name='done-all'
+              size={24}
+              color='#5f5' />
+        }
       </View>
     </View>
     <View style={{ borderColor: '#ddd', borderBottomWidth: 1, marginVertical: 6 }} />
@@ -75,7 +77,7 @@ export default ({ item, onPress, onOpen, onClose }) => (
                 {m.displayName}
               </Text>
               <View style={style.workCount}>
-                <TouchableHighlight underlayColor='white' activeOpacity={0.5} onPress={() => { console.log('hi') }} >
+                <TouchableHighlight underlayColor='white' activeOpacity={0.5} onPress={() => { onMemberWitPressed(item.tfs_id, m) }} >
                   <View style={{ flex: 1, flexDirection: 'row' }}>
                     <Text style={[style.workCountText, { width: 48, paddingVertical: 6, marginHorizontal: 3, textAlign: 'center' }]}>
                       {m.taskCount}
@@ -105,17 +107,20 @@ export default ({ item, onPress, onOpen, onClose }) => (
                 <Text style={{ fontWeight:'bold' }}>
                   {it.name}
                 </Text>
-                <Text style={{ marginVertical: 2, fontSize: 12, color:  moment(it.finishDate).diff(moment(), 'days') >= 0 ? '#5f5' : '#f55'}}>
+                <Text style={{ marginVertical: 2, fontSize: 12 }}>
                   {moment(it.startDate).format('DD-MMM-YYYY')} - {moment(it.finishDate).format('DD-MMM-YYYY')}
                 </Text>
                 
               </View>
               <View style={style.workCount}>
                 <View style={{ flex: 1, flexDirection: 'row' }}>
-                  <Text style={{ borderRadius: 48, borderWidth: 1, borderColor: '#eee', width: 48, marginHorizontal: 3, textAlign: 'center', textAlignVertical: 'center' }}>
+                  <Text style={{ borderRadius: 5, borderWidth: 1, borderColor: '#eee', width: 48, marginHorizontal: 3, textAlign: 'center', textAlignVertical: 'center', fontSize: 20, color:  moment(it.finishDate).diff(moment(), 'days') >= 0 ? '#5f5' : '#f55' }}>
                     {moment(it.finishDate).diff(moment(), 'days')}
                   </Text>
-                  <TouchableHighlight underlayColor='white' activeOpacity={0.5} onPress={() => { console.log('hi') }} >
+                  <Text style={{ borderRadius: 48, borderWidth: 1, borderColor: 'lightblue', width: 48, marginHorizontal: 3, textAlign: 'center', textAlignVertical: 'center' }}>
+                    {it.taskClosed}
+                  </Text>
+                  <TouchableHighlight underlayColor='white' activeOpacity={0.5} onPress={() => { onIterationWitPressed(item.tfs_id, it.name) }} >
                     <Text style={[style.workCountText, { width: 48, height: 40, marginHorizontal: 3, textAlign: 'center', textAlignVertical: 'center' }]}>
                       {it.taskCount}
                     </Text>

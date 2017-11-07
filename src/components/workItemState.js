@@ -8,6 +8,7 @@ import {
 import PropTypes from 'prop-types'
 import Swipeable from 'react-native-swipeable'
 import Icon from 'react-native-vector-icons/MaterialIcons'
+import moment from 'moment'
 
 const style = StyleSheet.create({
   view: {
@@ -23,16 +24,6 @@ const style = StyleSheet.create({
     backgroundColor: 'yellow',
     width: 5,
     marginRight: 10
-  },
-  task: {
-    backgroundColor: 'skyblue',
-    width: 10,
-    marginRight: 15
-  },
-  bug: {
-    backgroundColor: 'red',
-    width: 10,
-    marginRight: 15
   },
   rightSwipeButton: {
     flex: 1,
@@ -57,37 +48,23 @@ export default ({ item, onPress, onOpen, onClose  }) =>  (
           size={28}
           color='black'
         />
-      </TouchableHighlight>,
-      <TouchableHighlight 
-        underlayColor='blue'
-        style={[style.rightSwipeButton, { backgroundColor: 'lightblue' }]}>
-        <Icon
-          name="info-outline"
-          size={28}
-          color='white'
-        />
-      </TouchableHighlight>,
+      </TouchableHighlight>
     ]}
     onRightButtonsOpenRelease={onOpen}
     onRightButtonsCloseRelease={onClose}
   
   >
     <View style={style.view}>
-      {
-        item.type === 'Task'  ?
-          <View style={style.task} />  :
-          item.type === 'Bug'  ?
-            <View style={style.bug} /> :
-            <View style={style.backlog} /> 
-      }
-     
-
+      <View style={style.backlog} />
       <View style={{ paddingRight: 10, paddingVertical: 10 }}>
         <Text style={style.title}>
           {item.title}
         </Text>
+        <Text>
+          {item.iteration}
+        </Text>
         <Text style={{fontSize: 12 }}>
-          {item.state}
+          {moment(item.activatedDate).format('DD-MMM-YYYY')} - {moment(item.closedDate).format('DD-MMM-YYYY')} - ({moment(item.closedDate).diff(moment(item.activatedDate), 'days')} Days)
         </Text>
       </View>
     </View>

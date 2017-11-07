@@ -63,6 +63,7 @@ class ProjectScreen extends React.Component {
       this.state.currentlyOpenSwipeable.recenter()
     }
   }
+ 
   render () {
     const {currentlyOpenSwipeable} = this.state
     const itemProps = {
