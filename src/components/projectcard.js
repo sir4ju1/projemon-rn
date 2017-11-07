@@ -12,13 +12,12 @@ import moment from 'moment'
 const style = StyleSheet.create({
   view: {
     backgroundColor: 'white',
-    paddingVertical: 20,
+    paddingVertical: 15,
     borderRadius: 2,
     borderColor: '#ddd',
     borderWidth: 1,
-    margin: 5,
-    marginTop: 2,
-    marginBottom: 2
+    marginVertical: 5,
+    marginHorizontal: 5
   },
   title: {
     flex: 3,
@@ -35,27 +34,31 @@ const style = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: '#eee'
 
-  },
-  rightSwipeButton: {
-    flex: 1,
-    paddingHorizontal: 25,
-    justifyContent: 'center',
   }
 })
 
 export default ({ item, onPress, onOpen, onClose }) => (
   <View style={style.view}>
-    <View style={{ flex:1, flexDirection: 'row', paddingHorizontal: 10 }}>
-      <Text style={style.title}>
+    <View style={{ flex:1, flexDirection: 'row', paddingBottom: 10, paddingHorizontal: 10 }}>
+      <Text style={[style.title, { paddingVertical: 10 }]}>
         {item.name}
       </Text>
       <View style={style.workCount}>
-        <Text style={[style.workCountText, { fontSize: 18 }]}>
-          {item.taskClosed}/{item.taskCount}
-        </Text>
+        <View style={{ flex: 1, flexDirection: 'row' }}>
+          <TouchableHighlight underlayColor='white' activeOpacity={0.5} onPress={() => { console.log('hi') }} >
+            <Text style={[style.workCountText, { fontSize: 20, width: 56, height: 40, textAlign: 'center', textAlignVertical: 'center' }]} >
+              {item.taskClosed}
+            </Text>
+          </TouchableHighlight>
+          <TouchableHighlight underlayColor='white' activeOpacity={0.5} onPress={() => { console.log('hi') }} >
+            <Text style={[style.workCountText, { fontSize: 20, marginLeft: 5, width: 56, height: 40, textAlign: 'center', textAlignVertical: 'center' }]}>
+              {item.taskCount}
+            </Text>
+          </TouchableHighlight>
+        </View>
       </View>
     </View>
-    <View style={{ borderColor: '#ddd', borderBottomWidth: 1, marginVertical: 10 }} />
+    <View style={{ borderColor: '#ddd', borderBottomWidth: 1, marginVertical: 6 }} />
     {
       item.members.filter(m => !(m.taskActive === 0 && m.taskClosed === 0 && m.taskCount === 0)).map(m => {
         return (
@@ -72,18 +75,20 @@ export default ({ item, onPress, onOpen, onClose }) => (
                 {m.displayName}
               </Text>
               <View style={style.workCount}>
-                <View style={{ flex: 1, flexDirection: 'row' }}>
-                  <Text style={[style.workCountText, { width: 48, paddingVertical: 3, marginHorizontal: 3, backgroundColor: 'lightgreen', textAlign: 'center' }]}>
-                    {m.taskCount}
-                  </Text>
-                  <Text style={[style.workCountText, { width: 48, paddingVertical: 3, marginHorizontal: 3, backgroundColor: 'lightblue', textAlign: 'center' }]}>
-                    {m.taskActive}
-                  </Text>
-                  <Text style={[style.workCountText, { width: 48, paddingVertical: 3, marginHorizontal: 3, textAlign: 'center' }]}>
-                    {m.taskClosed}
-                  </Text>
-                </View>
-              </View> 
+                <TouchableHighlight underlayColor='white' activeOpacity={0.5} onPress={() => { console.log('hi') }} >
+                  <View style={{ flex: 1, flexDirection: 'row' }}>
+                    <Text style={[style.workCountText, { width: 48, paddingVertical: 6, marginHorizontal: 3, textAlign: 'center' }]}>
+                      {m.taskCount}
+                    </Text>
+                    <Text style={[style.workCountText, { width: 48, paddingVertical: 6, marginHorizontal: 3, backgroundColor: 'lightblue', textAlign: 'center' }]}>
+                      {m.taskActive}
+                    </Text>
+                    <Text style={[style.workCountText, { width: 48, paddingVertical: 6, marginHorizontal: 3, textAlign: 'center', backgroundColor: 'lightgreen' }]}>
+                      {m.taskClosed}
+                    </Text>
+                  </View>
+                </TouchableHighlight>
+              </View>
             </View>
            
           </View>
@@ -107,12 +112,14 @@ export default ({ item, onPress, onOpen, onClose }) => (
               </View>
               <View style={style.workCount}>
                 <View style={{ flex: 1, flexDirection: 'row' }}>
-                  <Text style={[style.workCountText, { width: 48, marginHorizontal: 3, textAlign: 'center', textAlignVertical: 'center' }]}>
+                  <Text style={{ borderRadius: 48, borderWidth: 1, borderColor: '#eee', width: 48, marginHorizontal: 3, textAlign: 'center', textAlignVertical: 'center' }}>
                     {moment(it.finishDate).diff(moment(), 'days')}
                   </Text>
-                  <Text style={[style.workCountText, { width: 48, marginHorizontal: 3, textAlign: 'center', textAlignVertical: 'center' }]}>
-                    {it.taskCount}
-                  </Text>
+                  <TouchableHighlight underlayColor='white' activeOpacity={0.5} onPress={() => { console.log('hi') }} >
+                    <Text style={[style.workCountText, { width: 48, height: 40, marginHorizontal: 3, textAlign: 'center', textAlignVertical: 'center' }]}>
+                      {it.taskCount}
+                    </Text>
+                  </TouchableHighlight>
                 </View>
               </View>
             </View>
