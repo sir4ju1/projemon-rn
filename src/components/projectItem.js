@@ -43,9 +43,10 @@ export default ({ item, onPress, onOpen, onClose, onCloseProject }) => (
     )} 
     rightButtons={[
       <TouchableHighlight
-        underlayColor='yellow'
+        underlayColor='white'
+        activeOpacity={0.5}
         onPress={onPress}
-        style={[style.rightSwipeButton, { backgroundColor: 'yellow' }]}>
+        style={[style.rightSwipeButton, { backgroundColor: '#cfc' }]}>
         <Icon
           name='mode-edit'
           size={28}
@@ -53,9 +54,10 @@ export default ({ item, onPress, onOpen, onClose, onCloseProject }) => (
         />
       </TouchableHighlight>,
       <TouchableHighlight 
-        underlayColor='green'
+        underlayColor='white'
+        activeOpacity={0.5}
         onPress={onCloseProject}
-        style={[style.rightSwipeButton, { backgroundColor: 'red' }]}>
+        style={[style.rightSwipeButton, { backgroundColor: '#f55' }]}>
         <Icon
           name="close"
           size={28}
@@ -67,7 +69,7 @@ export default ({ item, onPress, onOpen, onClose, onCloseProject }) => (
     onRightButtonsCloseRelease={onClose}
     >
     <View style={style.view}>
-      <View style={ { backgroundColor: item.status === 'closed' ? 'red' : 'green', width: 7, marginRight: 10 }}/>
+      <View style={ { backgroundColor: item.status === 'closed' ? '#f55' : '#5f5', width: 7, marginRight: 10 }}/>
       <View style={{paddingVertical: 15, paddingHorizontal: 5, flex:1, flexDirection: 'row' }}>
         <Text style={style.title}>
           {item.name}
