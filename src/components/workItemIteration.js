@@ -15,7 +15,7 @@ const style = StyleSheet.create({
   title: {
     fontSize: 14,
     fontWeight: 'bold',
-    paddingRight: 20
+    paddingRight: 50
   },
   backlog: {
     backgroundColor: 'yellow',
@@ -47,9 +47,19 @@ export default ({ item, type }) =>  (
 
 
     <View style={{ paddingRight: 10, paddingVertical: 10 }}>
+      <View style={{ flex: 1, flexDirection: 'row' }}>
+      {
+        item.state === 'Closed' ?
+        <Icon
+        style={{ padding: 3, fontWeight: 'bold'}}
+        name='done'
+        size={16}
+        color='#0f0' />: <View />
+      }
       <Text style={style.title}>
         {item.title}
       </Text>
+      </View>
       {
         item.state === 'Closed' ?
         <Text style={{fontSize: 12, marginTop: 5 }}>

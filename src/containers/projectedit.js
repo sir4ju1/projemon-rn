@@ -76,6 +76,28 @@ class ProjectEdit extends React.Component {
     this.props.setRepo(id)
     this.props.navigation.navigate('RepoEdit')
   }
+  _onRepoBuildPressed = async (id) => {
+    try {
+      this.setState( { loading: true })
+      var response = await fetch(`http://ci.lolobyte.com/api/projects/repo/${id}/rebuild`)
+      var result = await response.json()
+      
+    } catch (error) {
+      
+    }
+    this.setState( { loading: false })
+  }
+  _onRepoPullPressed = async (id) => {
+    try {
+      this.setState( { loading: true })
+      var response = await fetch(`http://ci.lolobyte.com/api/projects/repo/${id}/pull`)
+      var result = await response.json()
+      
+    } catch (error) {
+      
+    }
+    this.setState( { loading: false })
+  }
   render () {
     return (
       <ScrollView>
@@ -173,14 +195,32 @@ class ProjectEdit extends React.Component {
                       {re.name}
                     </Text>
                     <View style={{ flex: 1, alignItems: 'flex-end' }}>
-                      <TouchableHighlight onPress={()=>{ this._onRepoEditPressed(re._id) }}>
+                      <View style={{ flex: 1, flexDirection: 'row' }}>
+                        <TouchableHighlight onPress={() => { this._onRepoBuildPressed(re._id) }}>
+                          <View>
+                            <Icon
+                              name='repeat'
+                              size={24}
+                              color='gray' />
+                          </View>
+                        </TouchableHighlight>
+                        <TouchableHighlight onPress={() => { this._onRepoPullPressed(re._id) }}>
+                          <View>
+                            <Icon
+                              name='cached'
+                              size={24}
+                              color='gray' />
+                          </View>
+                        </TouchableHighlight>
+                        <TouchableHighlight onPress={() => { this._onRepoEditPressed(re._id) }}>
                           <View>
                             <Icon
                               name='mode-edit'
                               size={24}
                               color='gray' />
                           </View>
-                      </TouchableHighlight>
+                        </TouchableHighlight>
+                      </View>
                     </View>
                   </View>
                 )
