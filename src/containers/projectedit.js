@@ -195,8 +195,12 @@ class ProjectEdit extends React.Component {
                       {re.name}
                     </Text>
                     <View style={{ flex: 1, alignItems: 'flex-end' }}>
-                      <View style={{ flex: 1, flexDirection: 'row' }}>
-                        <TouchableHighlight onPress={() => { this._onRepoBuildPressed(re._id) }}>
+                      {
+                        this.state.loading ?
+                        <ActivityIndicator />
+                        :
+                        <View style={{ flex: 1, flexDirection: 'row' }}>
+                        <TouchableHighlight onPress={() => { this._onRepoBuildPressed(re._id) }} style={{ marginRight: 10 }} >
                           <View>
                             <Icon
                               name='repeat'
@@ -204,7 +208,7 @@ class ProjectEdit extends React.Component {
                               color='gray' />
                           </View>
                         </TouchableHighlight>
-                        <TouchableHighlight onPress={() => { this._onRepoPullPressed(re._id) }}>
+                        <TouchableHighlight onPress={() => { this._onRepoPullPressed(re._id) }} style={{ marginRight: 10 }} >
                           <View>
                             <Icon
                               name='cached'
@@ -221,6 +225,7 @@ class ProjectEdit extends React.Component {
                           </View>
                         </TouchableHighlight>
                       </View>
+                      }
                     </View>
                   </View>
                 )
