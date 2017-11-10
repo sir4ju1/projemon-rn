@@ -15,22 +15,21 @@ const style = StyleSheet.create({
   title: {
     fontSize: 14,
     fontWeight: 'bold',
-    paddingRight: 50
+    paddingRight: 48
+  },
+  sideColor: {
+    width: 5,
+    marginRight: 10
   },
   backlog: {
-    backgroundColor: 'yellow',
-    width: 10,
-    marginRight: 10
+    backgroundColor: '#ddd'
+    
   },
   task: {
     backgroundColor: 'skyblue',
-    width: 10,
-    marginRight: 20
   },
   bug: {
-    backgroundColor: 'red',
-    width: 10,
-    marginRight: 20
+    backgroundColor: '#f55',
   }
 
 })
@@ -39,10 +38,10 @@ export default ({ item, type }) =>  (
   <View style={[style.view, { backgroundColor: type === 'section' ? 'white' : '#eee', borderBottomWidth: type === 'section' ? 1 : 0.5, borderColor: '#ddd'  }]}>
     {
       item.type === 'Task' ?
-        <View style={style.task} /> :
+        <View style={[style.sideColor, style.task]} /> :
         item.type === 'Bug' ?
-          <View style={style.bug} /> :
-          <View style={style.backlog} />
+          <View style={[style.sideColor, style.bug]} /> :
+          <View style={[style.sideColor, style.backlog]} />
     }
 
 
@@ -51,7 +50,7 @@ export default ({ item, type }) =>  (
       {
         item.state === 'Closed' ?
         <Icon
-        style={{ padding: 3, fontWeight: 'bold'}}
+        style={{ padding: 3, fontWeight: 'bold' }}
         name='done'
         size={16}
         color='#0f0' />: <View />

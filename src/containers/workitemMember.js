@@ -4,6 +4,8 @@ import { connect } from 'react-redux'
 
 import vsts from '../api/common'
 import WorkItem from '../components/workItemMember'
+import WorkItemSection from '../components/workItemIteration'
+import _ from 'lodash'
 
 class WorkItemScreen extends React.Component {
   constructor() {
@@ -56,23 +58,60 @@ class WorkItemScreen extends React.Component {
       
     }
   }
-  onPressItem = async (item, index) => {
-    // Alert.alert(
-    //   item.fields['System.State'],
-    //   'Change Status',
-    //   [
-    //     {text: 'Close', onPress: () => console.log('Ask me later pressed')},
-    //     {text: 'Done', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-    //     {text: 'Cancel', onPress: () => console.log('OK Pressed')},
-    //   ],
-    //   { cancelable: false }
-    // )
-    let result = await vsts.closeWorkItem(item.id)
-    console.log(result)
-    let items = this.state.data
-    items.splice(index, 1)
-    this.setState({ data: items })
-    // this._handleScroll()
+  
+  _onActivate = async (item) => {
+    try {
+      const state = item.item.state === 'New' ? 'Active' : item.item.state === 'Active' ? 'New' : 'New'
+      var response = await fetch(`http://ci.lolobyte.com/api/vsts/wit/state`, {
+        method: 'patch',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: item.item._id,
+          state
+        })
+      })
+      var result = await response.json()
+      if (result.success) {
+        const items = _.cloneDeep(this.state.data)
+        const section = items.filter(i => i._id === item.section._id)
+        section[0].data[item.index].state = state
+        this.setState({ data: items })
+        await this.props.navigation.state.params.refresh()
+      }
+      
+    } catch (error) {
+      
+    }
+    
+  }
+  _onClosePress = async (item) => {
+    try {
+      if (item.item.state === 'New') return false
+      const state = 'Closed'
+      var response = await fetch(`http://ci.lolobyte.com/api/vsts/wit/state`, {
+        method: 'patch',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: item.item._id,
+          state
+        })
+      })
+      var result = await response.json()
+      if (result.success) {
+        let items = _.cloneDeep(this.state.data)
+        const section = items.findIndex(i => i._id === item.section._id)
+        const idx = section
+        items[idx].data.splice(item.index, 1)
+        if (items[idx].data.length === 0) {
+          items.splice(idx, 1)
+        }
+        this.setState({ data: items })
+        await this.props.navigation.state.params.refresh()
+      }
+      
+    } catch (error) {
+      console.log(error.message)
+    }
   }
   render () {
     const {currentlyOpenSwipeable} = this.state
@@ -88,23 +127,24 @@ class WorkItemScreen extends React.Component {
     
     return (
       <SectionList
-        renderItem={({ item, index }) => <WorkItem
-          item={item}
+        renderItem={(item) => <WorkItem
+          item={item.item}
           type='item'
-          onPress={() => this.onPressItem(item, index)}
+          onActivate={async () => await this._onActivate(item)}
+          onClosePress={async () => await this._onClosePress(item)}
           {...itemProps}
         />}
-        renderSectionHeader={({ section, index }) => <WorkItem
+        renderSectionHeader={({ section, index }) => <WorkItemSection
           item={section}
-          type='section'
-          onPress={() => this.onPressItem(section, index)}
+          type='section'          
           {...itemProps}
         />}
         sections={this.state.data}
         SectionSeparatorComponent={() => (
           <View style={{ borderBottomWidth: 1, borderBottomColor: '#aaa' }} />
         )}
-        
+        onRefresh={async () => await this._fetchData() }
+        refreshing={this.state.loading}
       />
     )
   }

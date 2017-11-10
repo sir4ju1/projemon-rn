@@ -19,7 +19,7 @@ class HomeScreen extends React.PureComponent {
     headerTitle: 'Home',
     headerLeft: <DrawerButton navigation={navigation} />,
   })
-  async componentWillMount () {
+  async componentDidMount () {
     try {
       const projectIds = await AsyncStorage.getItem('project-stat')
       if (projectIds) {
@@ -39,6 +39,7 @@ class HomeScreen extends React.PureComponent {
     }
   }
   _fetchData = async () => {
+    this.setState({ refreshing: true })
     const response = await fetch('http://ci.lolobyte.com/api/projects/statistic')
     const result = await response.json()
     if (result.success) {
@@ -49,12 +50,12 @@ class HomeScreen extends React.PureComponent {
         await AsyncStorage.setItem(`p:${element._id}`, JSON.stringify(element))
       }
       await AsyncStorage.setItem('project-stat', JSON.stringify(ids))
-      this.setState({ data: result.data })
+      this.setState({ data: result.data, refreshing: false })
     }
   }
   _onClosedStoriesPressed = (tfsId) => {
     this.props.setWorkIds(tfsId)
-    this.props.navigation.navigate('WorkItemState')
+    this.props.navigation.navigate('WorkItemState', { refresh: this._fetchData })
   }
   _onMemberWitPressed = (tfsId, member) => {
     this.props.setMemberWorkIds(tfsId,`${member.displayName} <${member.uniqueName}>`)

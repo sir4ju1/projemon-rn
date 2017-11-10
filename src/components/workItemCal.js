@@ -20,7 +20,8 @@ const style = StyleSheet.create({
     fontWeight: 'bold',
     paddingRight: 15
   },
-  sideColor: {
+  backlog: {
+    backgroundColor: 'yellow',
     width: 5,
     marginRight: 10
   },
@@ -32,15 +33,19 @@ const style = StyleSheet.create({
 
 })
 
-export default ({ item, type, onPress, onOpen, onClose  }) =>  (
+export default ({ item, onPress, onOpen, onClose  }) =>  (
   <Swipeable
+    leftContent={(
+      <Text>Done</Text>
+    )} 
     rightButtons={[
       <TouchableHighlight
-        underlayColor='green'
+        underlayColor='white'
+        activeOpacity={0.5}
         onPress={onPress}
         style={[style.rightSwipeButton, { backgroundColor: 'lightgreen' }]}>
         <Icon
-          name='done'
+          name='print'
           size={28}
           color='black'
         />
@@ -50,14 +55,17 @@ export default ({ item, type, onPress, onOpen, onClose  }) =>  (
     onRightButtonsCloseRelease={onClose}
   
   >
-    <View style={[style.view, { backgroundColor: type === 'section' ? 'white' : '#eee', borderBottomWidth: type === 'section' ? 1 : 0.5, borderColor: '#ddd'   }]}>
-      <View style={[style.sideColor, { backgroundColor: type === 'section' ? '#ddd' : 'lightblue' }]} />
+    <View style={style.view}>
+      <View style={style.backlog} />
       <View style={{ paddingRight: 10, paddingVertical: 10 }}>
         <Text style={style.title}>
           {item.title}
         </Text>
         <Text>
           {item.iteration}
+        </Text>
+        <Text style={{fontSize: 12 }}>
+          {moment(item.activatedDate).format('DD-MMM-YYYY')} - {moment(item.closedDate).format('DD-MMM-YYYY')} - ({moment(item.closedDate).diff(moment(item.activatedDate), 'days')} Days)
         </Text>
       </View>
     </View>

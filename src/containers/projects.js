@@ -36,8 +36,8 @@ class ProjectScreen extends React.Component {
     var response = await fetch('http://ci.lolobyte.com/api/projects')
     var result = await response.json()
     if (result.success) {
-      await AsyncStorage.setItem(`project-list`, JSON.stringify(result.data))
       this.setState({ data: result.data })
+      await AsyncStorage.setItem(`project-list`, JSON.stringify(result.data))
     }
     this.setState({ loading: false })
   }
@@ -53,17 +53,30 @@ class ProjectScreen extends React.Component {
     this.state.currentlyOpenSwipeable.recenter()
     this.props.navigation.navigate('ProjectEdit')
   }
+  _onPullLeft = async (project, index) => {
+    console.log('active')
+    await this._stateChange(project, index, 'active')
+  }
   _onCloseProject = async (project, index) => {
-    var response = await fetch(`http://ci.lolobyte.com/api/projects/${project}/close`, { method: 'patch', headers: { 'Content-Type': 'application/json' } })
-    var result = await response.json()
-    if (result.success) {
-      const items = _.cloneDeep(this.state.data)
-      items[index].status = 'closed'
-      this.setState({ data: items })
-      this.state.currentlyOpenSwipeable.recenter()
+    console.log('closed')
+    await this._stateChange(project, index, 'closed')
+  }
+  _stateChange = async (project, index, state) => {
+    try {
+      var response = await fetch(`http://ci.lolobyte.com/api/projects/${project}/state/${state}`,
+      { method: 'patch', headers: { 'Content-Type': 'application/json' } })
+      var result = await response.json()
+      if (result.success) {
+        const items = _.cloneDeep(this.state.data)
+        items[index].status = state
+        this.setState({ data: items })
+        await AsyncStorage.setItem(`project-list`, JSON.stringify(items))
+        this.state.currentlyOpenSwipeable.recenter()
+      }
+    } catch (error) {
+      
     }
   }
- 
   render () {
     const {currentlyOpenSwipeable} = this.state
     const itemProps = {
@@ -87,14 +100,15 @@ class ProjectScreen extends React.Component {
             <ProjectItem
               item={item}
               onPress={() => this._onPressItem(item._id)}
-              onCloseProject={() => this._onCloseProject(item._id, index)}
+              onPullLeft={ async () => await this._onPullLeft(item._id, index) }
+              onCloseProject={ async () => await this._onCloseProject(item._id, index) }
               {...itemProps}
             />
           )}
           ItemSeparatorComponent={() => (
             <View style={{borderWidth: 0.5, borderColor: '#999'}} />
           )}
-          onRefresh={() => this._fetchData}
+          onRefresh={async () => await this._fetchData() }
           refreshing={this.state.loading}
         />
     }

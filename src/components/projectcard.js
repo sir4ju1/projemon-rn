@@ -44,20 +44,20 @@ export default ({ item, onPress, onOpen, onClose, onClosedStoriesPressed, onMemb
         {item.name}
       </Text>
       <View style={style.workCount}>
+        <TouchableHighlight underlayColor='white' activeOpacity={0.5} onPress={() => { onClosedStoriesPressed(item.tfs_id) }} >
         {
           item.taskClosed > 0 ?
-            <TouchableHighlight underlayColor='white' activeOpacity={0.5} onPress={() => { onClosedStoriesPressed(item.tfs_id) }} >
-              <Text style={[style.workCountText, { fontSize: 20, width: 56, height: 40, textAlign: 'center', textAlignVertical: 'center' }]} >
-                {item.taskClosed}
-              </Text>
-            </TouchableHighlight>
+            <Text style={[style.workCountText, { fontSize: 20, width: 56, height: 40, textAlign: 'center', textAlignVertical: 'center' }]} >
+              {item.taskClosed}
+            </Text>
           :
             <Icon
-              style={{ padding: 7}}
+              style={[style.workCountText, { fontSize: 20, width: 56, height: 40, textAlign: 'center', textAlignVertical: 'center' }]}
               name='done-all'
               size={24}
               color='#5f5' />
         }
+        </TouchableHighlight>
       </View>
     </View>
     <View style={{ borderColor: '#ddd', borderBottomWidth: 1, marginVertical: 6 }} />

@@ -1,11 +1,9 @@
 import React from 'react';
-import { View, Text, TouchableHighlight, SectionList, Alert, ActivityIndicator, AsyncStorage } from 'react-native'
+import { View, Text, FlatList, Alert, ActivityIndicator, AsyncStorage } from 'react-native'
 import { connect } from 'react-redux'
 
 import vsts from '../api/common'
-import WorkItem from '../components/workItemState'
-import WorkItemSection from '../components/workItemIteration'
-import Icon from 'react-native-vector-icons/MaterialIcons'
+import WorkItem from '../components/workItemCal'
 
 class WorkItemScreen extends React.Component {
   constructor() {
@@ -17,18 +15,8 @@ class WorkItemScreen extends React.Component {
     }
   }
   static navigationOptions = ({navigation}) => ({
-    drawerLabel: 'Work Items',
-    headerTitle: 'Work Items',
-    headerRight: (
-      <TouchableHighlight style={{ marginRight: 10 }} onPress={() => navigation.navigate('WorkItemCal')}>
-        <View>
-          <Icon
-            name='date-range'
-            size={30}
-            color='#111' />
-        </View>
-      </TouchableHighlight>
-    )
+    drawerLabel: 'Work Calendar',
+    headerTitle: 'Work Calendar'
   })
 
   async componentDidMount() {
@@ -71,18 +59,7 @@ class WorkItemScreen extends React.Component {
   }
   onPressItem = async (item, index) => {
     try {
-      var response = await fetch(`http://ci.lolobyte.com/api/workitems`, {
-        method: 'patch',
-        headers: { 'Content-Type': 'application/json' }
-      })
-      var result = await response.json()
-      console.log('accept-wit', result.data)
-      if (result.success) {
-        const items = this.state.data
-        items.splice(index, 1)
-        this.setState({ data: items })
-        await this.props.navigation.state.params.refresh()
-      }
+      
     } catch (error) {
       
     }
@@ -103,21 +80,27 @@ class WorkItemScreen extends React.Component {
     if (this.state.loading) {
       view = <ActivityIndicator size="large" style={{flex: 1, alignItems: 'center', justifyContent: 'center', padding: 10 }}/>
     } else {
-      view = <SectionList
-        renderItem={({ item, index }) => <WorkItem
-          item={item}
-          type='item'
-          onPress={() => this.onPressItem(item, index)}
-          {...itemProps}
-        />}
-        renderSectionHeader={({ section, index }) => <WorkItemSection
-          item={section}
-          type='section'
-          {...itemProps}
-        />}
-        sections={this.state.data}
-
-      />
+      view = <FlatList onScroll={this._handleScroll}
+                data={this.state.data}
+                keyExtractor={(item, index) => item._id}
+                renderItem={({item, index}) => (
+                  <WorkItem
+                    item={item}
+                    onPress={() => this.onPressItem(item, index)}
+                    {...itemProps}
+                  />
+                )}
+                ItemSeparatorComponent={() => (
+                  <View style={{borderWidth: 1, borderColor: '#ddd'}} />
+                )}
+                ListEmptyComponent= {() => (
+                  <View style={{flex: 1, alignItems: 'center', marginTop: 30 }}>
+                    <Text> Nothing to Show </Text>
+                  </View>
+                )}
+                onRefresh={() => this.refreshWorkItems}
+                refreshing={this.state.loading}
+              />
     }
     return (
       view

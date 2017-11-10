@@ -36,10 +36,17 @@ const style = StyleSheet.create({
   }
 })
 
-export default ({ item, onPress, onOpen, onClose, onCloseProject }) => (
+export default ({ item, onPress, onOpen, onClose, onPullLeft, onCloseProject }) => (
   <Swipeable
+    leftActionActivationDistance={150}
     leftContent={(
-      <Text>Pull to activate</Text>
+      <View style={{flex: 1, alignItems: 'flex-end', justifyContent: 'center', paddingRight: 20, backgroundColor: '#5f5'}} >
+        <Icon
+          name="lock-open"
+          size={28}
+          color='white'
+        />
+      </View>
     )} 
     rightButtons={[
       <TouchableHighlight
@@ -65,10 +72,11 @@ export default ({ item, onPress, onOpen, onClose, onCloseProject }) => (
         />
       </TouchableHighlight>,
     ]}
+    onLeftActionComplete={onPullLeft}
     onRightButtonsOpenRelease={onOpen}
     onRightButtonsCloseRelease={onClose}
     >
-    <View style={style.view}>
+    <View style={[style.view, {  backgroundColor: item.status === 'closed' ? '#ddd' : '#fff' }]}>
       <View style={ { backgroundColor: item.status === 'closed' ? '#f55' : '#5f5', width: 7, marginRight: 10 }}/>
       <View style={{paddingVertical: 15, paddingHorizontal: 5, flex:1, flexDirection: 'row' }}>
         <Text style={style.title}>

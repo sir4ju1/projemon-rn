@@ -11,6 +11,7 @@ import ProjectEdit from '../containers/projectedit'
 import WorkItemScreen from '../containers/workItems'
 import RepoScreen from '../containers/repo'
 import WorkItemStateScreen from '../containers/workitemState'
+import WorkItemCalScreen from '../containers/workitemCal'
 import WorkItemMemberScreen from '../containers/workitemMember'
 import WorkItemIterationScreen from '../containers/workitemIteration'
 import DrawerButton from '../components/drawerButton'
@@ -28,6 +29,9 @@ const HomeNavigator = StackNavigator({
   },
   WorkItemIteration: {
     screen: WorkItemIterationScreen
+  },
+  WorkItemCal: {
+    screen: WorkItemCalScreen
   },
   Login: {
     screen: LoginScreen,
