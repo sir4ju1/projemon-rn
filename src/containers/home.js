@@ -1,11 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { View, Text, Button, FlatList, AsyncStorage } from 'react-native'
+import { View, Text, Button, FlatList, AsyncStorage, Alert } from 'react-native'
 import { connect } from 'react-redux'
 import { NavigationActions } from 'react-navigation'
 import DrawerButton from '../components/drawerButton'
 import ProjectCard from '../components/projectcard'
-
+import * as notification from '../actions/notification'
+import { bindActionCreators } from 'redux';
 class HomeScreen extends React.PureComponent {
   constructor (props) {
     super(props)
@@ -34,9 +35,23 @@ class HomeScreen extends React.PureComponent {
       } else {
         await this._fetchData()
       }
+      
     } catch (error) {
-      console.log(error)
+      console.log(error.message)
     }
+  }
+  componentWillReceiveProps  (next) {
+    console.log(next.message)
+    Alert.alert(
+      'Alert Title',
+      next.message,
+      [
+        {text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
+        {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+        {text: 'OK', onPress: () => console.log('OK Pressed')},
+      ],
+      { cancelable: false }
+    )
   }
   _fetchData = async () => {
     this.setState({ refreshing: true })
@@ -51,6 +66,7 @@ class HomeScreen extends React.PureComponent {
       }
       await AsyncStorage.setItem('project-stat', JSON.stringify(ids))
       this.setState({ data: result.data, refreshing: false })
+      this.props.subscribeStatus()
     }
   }
   _onClosedStoriesPressed = (tfsId) => {
@@ -59,14 +75,13 @@ class HomeScreen extends React.PureComponent {
   }
   _onMemberWitPressed = (tfsId, member) => {
     this.props.setMemberWorkIds(tfsId,`${member.displayName} <${member.uniqueName}>`)
-    this.props.navigation.navigate('WorkItemMember')
+    this.props.navigation.navigate('WorkItemMember', { refresh: this._fetchData })
   }
   _onIterationWitPressed = (tfsId, iteration) => {
     this.props.setIterationWorkIds(tfsId, iteration)
     this.props.navigation.navigate('WorkItemIteration')
   }
   render () {
-
     return (
         <FlatList
           data={this.state.data}
@@ -86,13 +101,15 @@ class HomeScreen extends React.PureComponent {
 
 
 const mapStateToProps = state => ({
-  isLoggedIn: state.auth.isLoggedIn
+  isLoggedIn: state.auth.isLoggedIn,
+  message: state.app.wsData
 })
 const mapDispatchToProps = dispatch => ({
   store: (token) => dispatch({ type: 'Store', token }),
   setWorkIds: (project) => dispatch({ type: 'WorkItems', project }),
   setMemberWorkIds: (project, member) => dispatch({ type: 'WorkItems', project, member }),
-  setIterationWorkIds: (project, iteration) => dispatch({ type: 'WorkItems', project, iteration })
+  setIterationWorkIds: (project, iteration) => dispatch({ type: 'WorkItems', project, iteration }),
+  ...bindActionCreators(notification, dispatch)
 })
 
 

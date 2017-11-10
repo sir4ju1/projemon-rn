@@ -6,16 +6,15 @@
 
 import React, { Component } from 'react'
 import { Provider } from 'react-redux'
-import { createStore } from 'redux'
 
-import appReducer from './reducers'
 import MainNavigator from './navigators'
+import createStore from './store'
+const store = createStore()
 
 export default class App extends Component {
-  store = createStore(appReducer)
   render () {
     return (
-      <Provider store={this.store}>
+      <Provider store={store}>
         <MainNavigator />
       </Provider>
     )

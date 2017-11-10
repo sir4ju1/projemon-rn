@@ -6,6 +6,7 @@ import vsts from '../api/common'
 import WorkItem from '../components/workItemState'
 import WorkItemSection from '../components/workItemIteration'
 import Icon from 'react-native-vector-icons/MaterialIcons'
+import _ from 'lodash'
 
 class WorkItemScreen extends React.Component {
   constructor() {
@@ -69,22 +70,29 @@ class WorkItemScreen extends React.Component {
       
     }
   }
-  onPressItem = async (item, index) => {
+  onPressItem = async (item, section, index) => {
     try {
       var response = await fetch(`http://ci.lolobyte.com/api/workitems`, {
         method: 'patch',
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: item._id,
+          isAccepted: true
+        })
       })
       var result = await response.json()
-      console.log('accept-wit', result.data)
       if (result.success) {
-        const items = this.state.data
-        items.splice(index, 1)
+        let items = _.cloneDeep(this.state.data)
+        const idx = items.findIndex(i => i._id === section._id)
+        items[idx].data.splice(index, 1)
+        if (items[idx].data.length === 0) {
+          items.splice(idx, 1)
+        }
         this.setState({ data: items })
         await this.props.navigation.state.params.refresh()
       }
     } catch (error) {
-      
+      console.log(error.message)
     }
     
   }
@@ -99,28 +107,23 @@ class WorkItemScreen extends React.Component {
       },
       onClose: () => this.setState({currentlyOpenSwipeable: null})
     }
-    let view
-    if (this.state.loading) {
-      view = <ActivityIndicator size="large" style={{flex: 1, alignItems: 'center', justifyContent: 'center', padding: 10 }}/>
-    } else {
-      view = <SectionList
-        renderItem={({ item, index }) => <WorkItem
-          item={item}
-          type='item'
-          onPress={() => this.onPressItem(item, index)}
-          {...itemProps}
-        />}
-        renderSectionHeader={({ section, index }) => <WorkItemSection
-          item={section}
-          type='section'
-          {...itemProps}
-        />}
-        sections={this.state.data}
-
-      />
-    }
     return (
-      view
+      <SectionList
+      renderItem={({ item, section, index }) => <WorkItem
+        item={item}
+        type='item'
+        onPress={() => this.onPressItem(item, section, index)}
+        {...itemProps}
+      />}
+      renderSectionHeader={({ section, index }) => <WorkItemSection
+        item={section}
+        type='section'
+        {...itemProps}
+      />}
+      sections={this.state.data}
+      onRefresh={async () => await this._fetchData()}
+      refreshing={this.state.loading}
+    />
     )
   }
 }

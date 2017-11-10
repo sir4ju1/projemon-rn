@@ -15,7 +15,7 @@ const style = StyleSheet.create({
   title: {
     fontSize: 14,
     fontWeight: 'bold',
-    paddingRight: 48
+    paddingRight: 20
   },
   sideColor: {
     width: 5,
@@ -35,7 +35,7 @@ const style = StyleSheet.create({
 })
 
 export default ({ item, type }) =>  (
-  <View style={[style.view, { backgroundColor: type === 'section' ? 'white' : '#eee', borderBottomWidth: type === 'section' ? 1 : 0.5, borderColor: '#ddd'  }]}>
+  <View style={[style.view, { backgroundColor: type === 'section' ? 'white' : '#eee', borderBottomWidth: type === 'section' ? 1 : 0.5, borderColor: '#ddd' }]}>
     {
       item.type === 'Task' ?
         <View style={[style.sideColor, style.task]} /> :
@@ -44,29 +44,42 @@ export default ({ item, type }) =>  (
           <View style={[style.sideColor, style.backlog]} />
     }
 
+    <View style={{ flex: 1, flexDirection: 'column' } }>
+      <View style={{ flex: 1, flexDirection: 'row', paddingTop: 5 }}>
+        {
+          item.state === 'Closed' ?
+            <Icon
+              style={{ padding: 3, fontWeight: 'bold' }}
+              name='done'
+              size={16}
+              color='#0f0' /> : <View />
+        }
+        <Text style={style.title}>
+          {item.title}
+        </Text>
 
-    <View style={{ paddingRight: 10, paddingVertical: 10 }}>
-      <View style={{ flex: 1, flexDirection: 'row' }}>
-      {
-        item.state === 'Closed' ?
-        <Icon
-        style={{ padding: 3, fontWeight: 'bold' }}
-        name='done'
-        size={16}
-        color='#0f0' />: <View />
-      }
-      <Text style={style.title}>
-        {item.title}
-      </Text>
       </View>
-      {
-        item.state === 'Closed' ?
-        <Text style={{fontSize: 12, marginTop: 5 }}>
-          {moment(item.activatedDate).format('DD-MMM-YYYY')} - {moment(item.closedDate).format('DD-MMM-YYYY')} - ({moment(item.closedDate).diff(moment(item.activatedDate), 'days')} Days)
-      </Text> :
-      <View>
+
+      <View style={{ flex: 1, flexDirection: 'row', paddingBottom: 5}}>
+        <View style={{ flex: 1, alignItems: 'flex-start' }}>
+          {
+            type === 'section' ?
+            <Text>
+              {item.iteration}
+            </Text> :
+            <View />
+          }
+        </View>
+        {
+          item.state === 'Closed' && type !== 'section' ?
+            <View style={{ flex: 1, alignItems: 'flex-end', paddingRight: 10 }}>
+              <Text style={{ fontSize: 12 }}>
+                {moment(item.closedDate).format('DD-MMM-YYYY')} - ({moment(item.closedDate).diff(moment(item.activatedDate), 'hours') > 0 ? moment(item.closedDate).diff(moment(item.activatedDate), 'hours') : 0} h)
+              </Text>
+            </View> :
+            <View />
+        }
       </View>
-      }
     </View>
   </View>
 )
