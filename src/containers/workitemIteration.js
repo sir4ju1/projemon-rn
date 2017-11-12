@@ -23,6 +23,9 @@ class WorkItemScreen extends React.Component {
     const data = await this._fetchData()
     
   }
+  async componentWillReceiveProps  (next) {
+    await this._fetchData()
+  }
   _fetchData = async () => {
     try {
       this.setState({loading: true})

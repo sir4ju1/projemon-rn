@@ -8,7 +8,6 @@ import LoginScreen from '../containers/login'
 import HomeScreen from '../containers/home'
 import ProjectScreen from '../containers/projects'
 import ProjectEdit from '../containers/projectedit'
-import WorkItemScreen from '../containers/workItems'
 import RepoScreen from '../containers/repo'
 import WorkItemStateScreen from '../containers/workitemState'
 import WorkItemCalScreen from '../containers/workitemCal'
@@ -50,9 +49,6 @@ const ProjectNavigator = StackNavigator({
   },
   ProjectEdit: {
     screen: ProjectEdit,
-  },
-  WorkItems: {
-    screen: WorkItemScreen
   },
   RepoEdit: {
     screen: RepoScreen

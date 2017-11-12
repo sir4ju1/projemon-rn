@@ -23,13 +23,7 @@ class ProjectScreen extends React.Component {
   })
   
   async componentDidMount() {
-    this._handleScroll()
-    const items = await AsyncStorage.getItem('project-list')
-    if (items) {
-      this.setState({ data: JSON.parse(items) })
-    } else {
-      await this._fetchData()
-    }
+    await this._fetchData()
   }
   _fetchData = async () => {
     this.setState({loading: true})

@@ -41,7 +41,6 @@ class HomeScreen extends React.PureComponent {
     }
   }
   async componentWillReceiveProps  (next) {
-    const props = JSON.parse(next.message)
     await this._fetchData()
   }
   _fetchData = async () => {

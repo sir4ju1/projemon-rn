@@ -20,7 +20,9 @@ class WorkItemScreen extends React.Component {
     drawerLabel: 'Work Items',
     headerTitle: 'Work Items',
   })
-
+  async componentWillReceiveProps  (next) {
+    await this._fetchData()
+  }
   async componentDidMount() {
     
     const data = await this._fetchData()
@@ -143,6 +145,7 @@ class WorkItemScreen extends React.Component {
         SectionSeparatorComponent={() => (
           <View style={{ borderBottomWidth: 1, borderBottomColor: '#aaa' }} />
         )}
+        onScroll={this._handleScroll}
         onRefresh={async () => await this._fetchData() }
         refreshing={this.state.loading}
       />
