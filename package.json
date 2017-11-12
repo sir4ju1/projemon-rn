@@ -12,6 +12,8 @@
 		"prop-types": "^15.6.0",
 		"react": "16.0.0",
 		"react-native": "^0.50.1",
+		"react-native-file-opener": "sir4ju1/react-native-file-opener",
+		"react-native-html-to-pdf": "^0.4.0",
 		"react-native-swipeable": "^0.6.0",
 		"react-native-vector-icons": "^4.4.2",
 		"react-navigation": "^1.0.0-beta.15",

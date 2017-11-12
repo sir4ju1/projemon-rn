@@ -3396,6 +3396,14 @@ react-native-drawer-layout@1.3.2:
   dependencies:
     react-native-dismiss-keyboard "1.0.0"
 
+react-native-file-opener@sir4ju1/react-native-file-opener:
+  version "0.2.1"
+  resolved "https://codeload.github.com/sir4ju1/react-native-file-opener/tar.gz/968f1860ef57f7b6d72cea8df2d978844053c1ee"
+
+react-native-html-to-pdf@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/react-native-html-to-pdf/-/react-native-html-to-pdf-0.4.0.tgz#93a1af31db12c0e7f4ec51c569070d8e61177479"
+
 react-native-swipeable@^0.6.0:
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/react-native-swipeable/-/react-native-swipeable-0.6.0.tgz#0fe551330018b83c754d27f505709a594f554370"

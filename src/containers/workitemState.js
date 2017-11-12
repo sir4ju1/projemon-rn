@@ -21,7 +21,7 @@ class WorkItemScreen extends React.Component {
     drawerLabel: 'Work Items',
     headerTitle: 'Work Items',
     headerRight: (
-      <TouchableHighlight style={{ marginRight: 10 }} onPress={() => navigation.navigate('WorkItemCal')}>
+      <TouchableHighlight underlayColor='white' activeOpacity={0.5}  style={{ marginRight: 10 }} onPress={() => navigation.navigate('WorkItemCal')}>
         <View>
           <Icon
             name='date-range'

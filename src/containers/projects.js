@@ -99,7 +99,7 @@ class ProjectScreen extends React.Component {
           renderItem={({item, index}) => (
             <ProjectItem
               item={item}
-              onPress={() => this._onPressItem(item._id)}
+              onPress={() => this._onPressItem(item.tfs_id)}
               onPullLeft={ async () => await this._onPullLeft(item._id, index) }
               onCloseProject={ async () => await this._onCloseProject(item._id, index) }
               {...itemProps}

@@ -35,38 +35,37 @@ class HomeScreen extends React.PureComponent {
       } else {
         await this._fetchData()
       }
-      
+      this.props.subscribeStatus()
     } catch (error) {
       console.log(error.message)
     }
   }
-  componentWillReceiveProps  (next) {
-    console.log(next.message)
-    Alert.alert(
-      'Alert Title',
-      next.message,
-      [
-        {text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
-        {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-        {text: 'OK', onPress: () => console.log('OK Pressed')},
-      ],
-      { cancelable: false }
-    )
+  async componentWillReceiveProps  (next) {
+    const props = JSON.parse(next.message)
+    await this._fetchData()
   }
   _fetchData = async () => {
-    this.setState({ refreshing: true })
-    const response = await fetch('http://ci.lolobyte.com/api/projects/statistic')
-    const result = await response.json()
-    if (result.success) {
-      let ids = []
-      for (var index = 0; index < result.data.length; index++) {
-        const element = result.data[index]
-        ids.push(element._id)
-        await AsyncStorage.setItem(`p:${element._id}`, JSON.stringify(element))
+    try {
+      this.setState({ refreshing: true })
+      const response = await fetch('http://ci.lolobyte.com/api/projects/statistic')
+      const result = await response.json()
+      if (result.success) {
+        let ids = []
+        for (var index = 0; index < result.data.length; index++) {
+          const element = result.data[index]
+          ids.push(element.tfs_id)
+          await AsyncStorage.setItem(`p:${element.tfs_id}`, JSON.stringify(element))
+        }
+        await AsyncStorage.setItem('project-stat', JSON.stringify(ids))
+        this.setState({ data: result.data, refreshing: false })
       }
-      await AsyncStorage.setItem('project-stat', JSON.stringify(ids))
-      this.setState({ data: result.data, refreshing: false })
+    } catch (error) {
+      
+    }
+    try {
       this.props.subscribeStatus()
+    } catch (error) {
+      
     }
   }
   _onClosedStoriesPressed = (tfsId) => {
