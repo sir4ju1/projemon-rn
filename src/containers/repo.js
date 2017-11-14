@@ -14,8 +14,10 @@ class RepoEdit extends React.Component {
       location: '',
       user: '',
       password: '',
+      branch: '',
       command: '',
-      args: []
+      args: [],
+      loading: false
     }
   }
   static navigationOptions = ({ navigation }) => ({
@@ -39,14 +41,16 @@ class RepoEdit extends React.Component {
   _onRemovePress = (index) => {
     const commands = Object.assign([], this.state.args)
     commands.splice(index, 1)
-    this.setState({ commands })
+    this.setState({ args: commands })
   }
   _onSavePress = async (id, index) => {
     try {
+      this.setState({ loading: true })
       var obj = {
         id: this.props.repo,
         location: this.state.location,
         user: this.state.user,
+        branch: this.state.branch,
         args: this.state.args
       }
       if (this.state.password.length > 0) {
@@ -61,6 +65,7 @@ class RepoEdit extends React.Component {
     } catch (error) {
       
     }
+    this.setState({ loading: false })
   }
   render () {
     return (
@@ -83,6 +88,10 @@ class RepoEdit extends React.Component {
             value= {this.state.password}
             secureTextEntry= {true}
           />
+          <TextInput placeholder="Git Branch"
+            onChangeText= {(branch) => this.setState({branch})}
+            value= {this.state.branch}
+          />
           <View style={{ flex: 1, flexDirection: 'row' }}>
             <View style={{ flex: 4 }}>
               <TextInput placeholder="Command"
@@ -93,7 +102,9 @@ class RepoEdit extends React.Component {
               />
             </View>
             <View style={{ flex: 1, alignItems: 'flex-end', paddingVertical: 5 }}>
-              <TouchableHighlight              
+              <TouchableHighlight
+                underlayColor='white'
+                activeOpacity={0.5}            
                 onPress={() => this._onAddPress() }
               >
               <Icon
@@ -106,12 +117,14 @@ class RepoEdit extends React.Component {
           {
             this.state.args.map((c,i) => {
               return (
-                <View style={{ flex: 1, flexDirection: 'row', marginVertical: 10 }} key={i} >
+                <View style={{ flex: 1, flexDirection: 'row', marginVertical: 5 }} key={i} >
                   <View style={{ flex: 4 }}>
                     <Text> {c} </Text>
                   </View>
                   <View style={{ flex: 1, alignItems: 'flex-end' }}>
                     <TouchableHighlight
+                      underlayColor='white'
+                      activeOpacity={0.5}  
                       onPress={() => this._onRemovePress(i)}
                     >
                       <Icon
@@ -126,13 +139,15 @@ class RepoEdit extends React.Component {
           }
           
           <View style={{paddingTop: 50}}>
-            <Button
-             
-              onPress={() => this._onSavePress() }
-
-              title="Save"
-
-            />
+            {
+              this.state.loading ? 
+              <ActivityIndicator />
+              :
+              <Button              
+               onPress={() => this._onSavePress() } 
+               title="Save"
+             />
+            }
           </View>
           
         </View>

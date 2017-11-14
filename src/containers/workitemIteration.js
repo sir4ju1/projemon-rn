@@ -4,12 +4,14 @@ import { connect } from 'react-redux'
 
 import vsts from '../api/common'
 import WorkItem from '../components/workItemIteration'
+import WorkItemSection from '../components/workItemState'
 
 class WorkItemScreen extends React.Component {
   constructor() {
     super()
     this.state = {
       loading: false,
+      currentlyOpenSwipeable: null,
       data: []
     }
   }
@@ -47,20 +49,50 @@ class WorkItemScreen extends React.Component {
     }
     this.setState({ loading: false })
   }
-  refreshWorkItems = async () => {
-    this.setState({loading: true})
-    this.setState({ data: data.value, loading: false })
+  _onPressSecion = async (item, index) => {
+    try {
+      const state = 'Closed'
+      var response = await fetch(`http://ci.lolobyte.com/api/vsts/wit/state`, {
+        method: 'patch',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: item._id,
+          state
+        })
+      })
+      var result = await response.json()
+      if (result.success) {
+        let items = _.cloneDeep(this.state.data)
+        items[index].state = state
+        this.setState({ data: items })
+      }
+    } catch (error) {
+      console.log(error.message)
+    }
+    
   }
   render () {
+    const {currentlyOpenSwipeable} = this.state
+    const itemProps = {
+      onOpen: (event, gestureState, swipeable) => {
+        if (currentlyOpenSwipeable && currentlyOpenSwipeable !== swipeable) {
+          currentlyOpenSwipeable.recenter()
+        }
+        this.setState({currentlyOpenSwipeable: swipeable})
+      },
+      onClose: () => this.setState({currentlyOpenSwipeable: null})
+    }
     return (
       <SectionList
         renderItem={({ item, index }) => <WorkItem
           item={item}
           type='item'
         />}
-        renderSectionHeader={({ section, index }) => <WorkItem
+        renderSectionHeader={({ section, index }) => <WorkItemSection
           item={section}
           type='section'
+          onPress={() => this._onPressSecion(section, index)}
+          {...itemProps}
         />}
         sections={this.state.data}
       />

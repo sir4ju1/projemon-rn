@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 
 import vsts from '../api/common'
 import WorkItem from '../components/workItemState'
+import WorkItemSection from '../components/workItemIteration'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import _ from 'lodash'
 
@@ -83,6 +84,9 @@ class WorkItemScreen extends React.Component {
         let items = _.cloneDeep(this.state.data)
         const idx = items.findIndex(i => i._id === section._id)
         items[idx].data.splice(index, 1)
+        if (items[idx].data.length === 0) {
+          items.splice(idx, 1)
+        }
         this.setState({ data: items })
         await this.props.navigation.state.params.refresh()
       }
@@ -91,42 +95,7 @@ class WorkItemScreen extends React.Component {
     }
     
   }
-  _onPressSecion = async (item, index) => {
-    try {
-      const state = 'Closed'
-      var response = await fetch(`http://ci.lolobyte.com/api/vsts/wit/state`, {
-        method: 'patch',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          id: item._id,
-          state
-        })
-      })
-      var result = await response.json()
-      if (result.success === false) {
-        return false
-      }
-      response = await fetch(`http://ci.lolobyte.com/api/workitems`, {
-        method: 'patch',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          id: item._id,
-          isAccepted: true,
-          state
-        })
-      })
-      result = await response.json()
-      if (result.success) {
-        let items = _.cloneDeep(this.state.data)
-        items.splice(index, 1)
-        this.setState({ data: items })
-        await this.props.navigation.state.params.refresh()
-      }
-    } catch (error) {
-      console.log(error.message)
-    }
-    
-  }
+
   render () {
     const {currentlyOpenSwipeable} = this.state
     const itemProps = {
@@ -146,11 +115,9 @@ class WorkItemScreen extends React.Component {
         onPress={() => this._onPressItem(item, section, index)}
         {...itemProps}
       />}
-      renderSectionHeader={({ section, index }) => <WorkItem
+      renderSectionHeader={({ section, index }) => <WorkItemSection
         item={section}
         type='section'
-        onPress={() => this._onPressSecion(item, index)}
-        {...itemProps}
       />}
       sections={this.state.data}
       onScroll={this._handleScroll}

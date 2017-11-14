@@ -52,7 +52,7 @@ export default ({ item, type }) =>  (
               style={{ padding: 3, fontWeight: 'bold' }}
               name='done'
               size={16}
-              color='#0f0' /> : <View />
+              color='green' /> : <View />
         }
         <Text style={style.title}>
           {item.title}

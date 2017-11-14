@@ -44,7 +44,7 @@ const style = StyleSheet.create({
 
 export default ({ item, type, onActivate, onClosePress, onOpen, onClose  }) =>  (
   <Swipeable
-    leftActionActivationDistance={120}
+    leftActionActivationDistance={90}
     leftContent={(
       <View style={{
         flex: 1, alignItems: 'flex-end', justifyContent: 'center', paddingRight: 20,
@@ -89,7 +89,7 @@ export default ({ item, type, onActivate, onClosePress, onOpen, onClose  }) =>  
         <Text>
           {item.iteration}
         </Text>
-        <Text style={{ color: item.state === 'New' ? '#5f5' : '#55f' }}>
+        <Text style={{ color: item.state === 'New' ? '#0f0' : '#55f' }}>
           {item.state}
         </Text>
       </View>

@@ -53,6 +53,14 @@ export default ({ item, type, onPress, onOpen, onClose  }) =>  (
     <View style={[style.view, { backgroundColor: type === 'section' ? 'white' : '#eee', borderBottomWidth: type === 'section' ? 1 : 0.5, borderColor: '#ddd'   }]}>
       <View style={[style.sideColor, { backgroundColor: type === 'section' ? '#ddd' : 'lightblue' }]} />
       <View style={{ paddingRight: 10, paddingVertical: 10 }}>
+        {
+          item.state === 'Closed' ?
+            <Icon
+              style={{ padding: 3, fontWeight: 'bold' }}
+              name='done-all'
+              size={16}
+              color='green' /> : <View />
+        }
         <Text style={style.title}>
           {item.title}
         </Text>
