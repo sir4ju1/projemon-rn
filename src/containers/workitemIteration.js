@@ -4,7 +4,8 @@ import { connect } from 'react-redux'
 
 import vsts from '../api/common'
 import WorkItem from '../components/workItemIteration'
-import WorkItemSection from '../components/workItemState'
+import WorkItemSection from '../components/workItemIterSec'
+import _ from 'lodash'
 
 class WorkItemScreen extends React.Component {
   constructor() {
@@ -49,7 +50,7 @@ class WorkItemScreen extends React.Component {
     }
     this.setState({ loading: false })
   }
-  _onPressSecion = async (item, index) => {
+  _onPressSecion = async (item) => {
     try {
       const state = 'Closed'
       var response = await fetch(`http://ci.lolobyte.com/api/vsts/wit/state`, {
@@ -63,13 +64,22 @@ class WorkItemScreen extends React.Component {
       var result = await response.json()
       if (result.success) {
         let items = _.cloneDeep(this.state.data)
+        const index = items.findIndex(i => i._id === item._id)
         items[index].state = state
         this.setState({ data: items })
       }
     } catch (error) {
       console.log(error.message)
     }
+    this.state.currentlyOpenSwipeable.recenter()
     
+  }
+  _handleScroll = () => {
+    const {currentlyOpenSwipeable} = this.state;
+    if (currentlyOpenSwipeable) {
+      currentlyOpenSwipeable.recenter()
+      
+    }
   }
   render () {
     const {currentlyOpenSwipeable} = this.state
@@ -88,13 +98,14 @@ class WorkItemScreen extends React.Component {
           item={item}
           type='item'
         />}
-        renderSectionHeader={({ section, index }) => <WorkItemSection
+        renderSectionHeader={({ section }) => <WorkItemSection
           item={section}
           type='section'
-          onPress={() => this._onPressSecion(section, index)}
+          onPress={() => this._onPressSecion(section)}
           {...itemProps}
         />}
         sections={this.state.data}
+        onScroll={this._handleScroll}
       />
     )
   }

@@ -48,26 +48,30 @@ export default ({ item, type, onPress, onOpen, onClose  }) =>  (
     ]}
     onRightButtonsOpenRelease={onOpen}
     onRightButtonsCloseRelease={onClose}
-  
+    style={{ borderColor: '#aaa', borderTopWidth: 1 }}
   >
-    <View style={[style.view, { backgroundColor: type === 'section' ? 'white' : '#eee', borderBottomWidth: type === 'section' ? 1 : 0.5, borderColor: '#ddd'   }]}>
-      <View style={[style.sideColor, { backgroundColor: type === 'section' ? '#ddd' : 'lightblue' }]} />
-      <View style={{ paddingRight: 10, paddingVertical: 10 }}>
+    <View style={{ flex: 1, flexDirection: 'column',
+      backgroundColor: type === 'section' ? 'white' : '#eee',
+        borderTopWidth: type === 'section' ? 3 : 0.5,
+        borderLeftWidth: type === 'section' ? 5 : 0,
+        minHeight: 50,
+        borderColor: '#ddd',
+        paddingBottom: 8, paddingHorizontal: 10 }}>
+
+      <View style={style.view}>
         {
           item.state === 'Closed' ?
             <Icon
-              style={{ padding: 3, fontWeight: 'bold' }}
+              style={{ paddingTop: 10, paddingRight: 3, fontWeight: 'bold' }}
               name='done-all'
               size={16}
               color='green' /> : <View />
         }
-        <Text style={style.title}>
-          {item.title}
-        </Text>
-        
-        <Text>
-          {item.iteration}
-        </Text>
+        <View style={{ paddingRight: 10, paddingVertical: 10 }}>
+          <Text style={style.title}>
+            {item.title}
+          </Text>
+        </View>
       </View>
     </View>
   </Swipeable>

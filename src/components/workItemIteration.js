@@ -35,7 +35,12 @@ const style = StyleSheet.create({
 })
 
 export default ({ item, type }) =>  (
-  <View style={[style.view, { backgroundColor: type === 'section' ? 'white' : '#eee', borderBottomWidth: type === 'section' ? 1 : 0.5, borderColor: '#ddd' }]}>
+  <View style={[style.view, { 
+    backgroundColor: type === 'section' ? 'white' : '#eee', 
+    borderBottomWidth: type === 'section' ? 1 : 0.5, 
+    borderColor: '#aaa',
+    minHeight: 50
+  }]}>
     {
       item.type === 'Task' ?
         <View style={[style.sideColor, style.task]} /> :
