@@ -2,7 +2,6 @@ import React from 'react';
 import { View, Text, FlatList, ActivityIndicator, AsyncStorage } from 'react-native'
 import { connect } from 'react-redux'
 
-import vsts from '../api/common'
 import DrawerButton from '../components/drawerButton'
 import ProjectItem from '../components/projectItem'
 import _ from 'lodash'

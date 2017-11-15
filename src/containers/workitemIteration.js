@@ -2,7 +2,6 @@ import React from 'react';
 import { View, Text, TouchableHighlight, SectionList, Alert, ActivityIndicator, AsyncStorage, PermissionsAndroid } from 'react-native'
 import { connect } from 'react-redux'
 
-import vsts from '../api/common'
 import WorkItem from '../components/workItemIteration'
 import WorkItemSection from '../components/workItemIterSec'
 import _ from 'lodash'

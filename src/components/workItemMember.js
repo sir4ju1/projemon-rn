@@ -72,7 +72,12 @@ export default ({ item, type, onActivate, onClosePress, onOpen, onClose  }) =>  
     onRightButtonsCloseRelease={onClose}
     onLeftActionComplete={onActivate}
   >
-    <View style={[style.view, { backgroundColor: type === 'section' ? 'white' : '#eee' }]}>
+    <View style={[style.view, { 
+      backgroundColor: type === 'section' ? 'white' : '#eee',
+      borderBottomWidth: type === 'section' ? 1 : 0.5,
+      minHeight: 50,
+      borderColor: '#aaa'
+    }]}>
       {
         item.type === 'Task'  ?
           <View style={style.task} />  :

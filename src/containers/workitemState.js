@@ -2,7 +2,6 @@ import React from 'react';
 import { View, Text, TouchableHighlight, SectionList, Alert, ActivityIndicator, AsyncStorage } from 'react-native'
 import { connect } from 'react-redux'
 
-import vsts from '../api/common'
 import WorkItem from '../components/workItemState'
 import WorkItemSection from '../components/workItemStatic'
 import Icon from 'react-native-vector-icons/MaterialIcons'

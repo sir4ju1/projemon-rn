@@ -2,7 +2,6 @@ import React from 'react';
 import { View, Text, FlatList, SectionList, Alert, ActivityIndicator } from 'react-native'
 import { connect } from 'react-redux'
 
-import vsts from '../api/common'
 import WorkItem from '../components/workItemMember'
 import WorkItemSection from '../components/workItemStatic'
 import _ from 'lodash'

@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, TextInput, Button, AsyncStorage } from 'react-native'
 import { connect } from 'react-redux'
-import base from '../api/base64'
 
 class LoginScreen extends React.Component {
   constructor (props) {
@@ -18,9 +17,8 @@ class LoginScreen extends React.Component {
   _login = async () => {
     
     try {
-      const token = base.btoa(`${this.state.user}:${this.state.password}`)
-      await AsyncStorage.setItem('@TFSExplorer:auth', token)
-      this.props.login(token)
+      // await AsyncStorage.setItem('@TFSExplorer:auth', token)
+      // this.props.login(token)
       this.props.navigation.navigate('Home')
      
     } catch (error) {

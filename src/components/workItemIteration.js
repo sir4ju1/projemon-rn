@@ -63,7 +63,7 @@ export default ({ item, type, onPress, onOpen, onClose }) =>  (
     marginTop: type === 'section' ? 5 : 0.5,
     borderTopWidth: type === 'section' ? 1 : 0,
     borderBottomWidth: type === 'section' ? 0 : 1,
-    borderColor: '#ccc',
+    borderColor: '#aaa',
     minHeight: 50
   }]}>
     {
@@ -77,10 +77,10 @@ export default ({ item, type, onPress, onOpen, onClose }) =>  (
     <View style={{ flex: 1, flexDirection: 'column' } }>
       <View style={{ flex: 1, flexDirection: 'row', paddingTop: 5 }}>
         <Icon
-          style={{ paddingTop: 3, paddingRight: 2 }}
+          style={{ paddingTop: 1, paddingRight: 2 }}
           name='check-circle'
           size={16}
-          color={ item.state === 'Closed' ? '#1f1' : '#bbb' } />
+          color={ item.state === 'Closed' ? 'green' : '#bbb' } />
           <Text style={style.title}>
           {item.title}
         </Text>
@@ -106,7 +106,7 @@ export default ({ item, type, onPress, onOpen, onClose }) =>  (
         {
            item.isOpt && type !== 'section' ?
             <View style={{ flex: 1, alignItems: 'flex-end', paddingRight: 10 }}>
-              <Text style={{color: '#d4d400'}}>
+              <Text style={{color: '#333', padding: 2, borderRadius: 2, backgroundColor: '#d4d400'}}>
                 Extra
               </Text>
             </View> :

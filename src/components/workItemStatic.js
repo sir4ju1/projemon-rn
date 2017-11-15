@@ -52,14 +52,6 @@ export default ({ item, type }) =>  (
 
     <View style={{ flex: 1, flexDirection: 'column' } }>
       <View style={{ flex: 1, flexDirection: 'row', paddingTop: 5 }}>
-        {
-          item.state === 'Closed' ?
-            <Icon
-              style={{ padding: 3, fontWeight: 'bold' }}
-              name='done'
-              size={16}
-              color='green' /> : <View />
-        }
         <Text style={style.title}>
           {item.title}
         </Text>
@@ -85,7 +77,7 @@ export default ({ item, type }) =>  (
         {
            item.isOpt && type !== 'section' ?
             <View style={{ flex: 1, alignItems: 'flex-end', paddingRight: 10 }}>
-              <Text style={{color: '#d4d400'}}>
+              <Text style={{color: '#333', padding: 2, borderRadius: 2, backgroundColor: '#d4d400'}}>
                 Extra
               </Text>
             </View> :
