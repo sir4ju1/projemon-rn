@@ -4,9 +4,7 @@ import { connect } from 'react-redux'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import moment from 'moment'
 import pdfMaker from 'react-native-html-to-pdf'
-import vsts from '../api/common'
 import FileOpener from 'react-native-file-opener'
-// import WorkItem from '../components/workItemCal'
 
 class WorkItemScreen extends React.Component {
   constructor() {
@@ -73,11 +71,11 @@ class WorkItemScreen extends React.Component {
         <div style="text-align: center;">
           <h2>${this.state.project}</h2>
           <h3>${item._id}</h3>
-        </div><div>`
+        </div><div style="font-size: 16px;">`
         result.data.forEach((us, index) => {
-          elements += `<br /><div><strong>${index+1}. ${us.title}</strong><div>`
+          elements += `<div style="padding: 5px 0;"><strong>${index+1}. ${us.title}</strong><div>`
           us.data.forEach((task, idx)=> {
-            elements += `<br /><div style="padding-left:20px;">${idx+1}. ${task.title}</div>`
+            elements += `<div style="padding-left:20px;">${idx+1}. ${task.title} <span style="padding-left: 10px;"> ${task.isOpt ? '(Extra)': ''}</span></div>`
           })
           elements += '</div></div>'
         })

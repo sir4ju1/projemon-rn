@@ -38,7 +38,10 @@ export default ({ item, type, onPress, onOpen, onClose  }) =>  (
       <TouchableHighlight
         underlayColor='green'
         onPress={onPress}
-        style={[style.rightSwipeButton, { backgroundColor: 'lightgreen' }]}>
+        style={[style.rightSwipeButton, { 
+          backgroundColor: 'lightgreen',
+          borderColor: '#ddd'
+        }]}>
         <Icon
           name='done'
           size={28}
@@ -48,11 +51,14 @@ export default ({ item, type, onPress, onOpen, onClose  }) =>  (
     ]}
     onRightButtonsOpenRelease={onOpen}
     onRightButtonsCloseRelease={onClose}
-    style={{ borderColor: '#aaa', borderTopWidth: 1 }}
+    style={{
+      marginTop: type === 'section' ? 5 : 0.5,
+      borderTopWidth: type === 'section' ? 1 : 0,
+      borderTopColor: '#ccc' 
+    }}
   >
     <View style={{ flex: 1, flexDirection: 'column',
-      backgroundColor: type === 'section' ? 'white' : '#eee',
-        borderTopWidth: type === 'section' ? 3 : 0.5,
+        backgroundColor: type === 'section' ? 'white' : '#eee',
         borderLeftWidth: type === 'section' ? 5 : 0,
         minHeight: 50,
         borderColor: '#ddd',

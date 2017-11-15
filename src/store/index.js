@@ -1,10 +1,11 @@
 import { createStore, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 import reducer from '../reducers'
+import ReconnectingWS from 'reconnecting-websocket'
 
 export default function configureStore(initialState) {
   const socket = function () {
-    return new WebSocket("ws://ci.lolobyte.com/socket")
+    return new ReconnectingWS('ws://ci.lolobyte.com/socket')
   }
   const store = createStore(
     reducer,

@@ -89,7 +89,7 @@ export default ({ item, type, onActivate, onClosePress, onOpen, onClose  }) =>  
         <Text>
           {item.iteration}
         </Text>
-        <Text style={{ color: item.state === 'New' ? '#0f0' : '#55f' }}>
+        <Text style={{ color: item.state === 'New' ? '#0d0' : '#55f' }}>
           {item.state}
         </Text>
       </View>

@@ -2,12 +2,10 @@ import React from 'react'
 import {
   View,
   Text,
-  TouchableHighlight,
   StyleSheet
 } from 'react-native'
 import moment from 'moment'
 import Icon from 'react-native-vector-icons/MaterialIcons'
-import Swipeable from 'react-native-swipeable'
 
 const style = StyleSheet.create({
   view: {
@@ -32,38 +30,16 @@ const style = StyleSheet.create({
   },
   bug: {
     backgroundColor: '#f55',
-  },
-  rightSwipeButton: {
-    flex: 1,
-    paddingHorizontal: 25,
-    justifyContent: 'center',
   }
 
 })
 
-export default ({ item, type, onPress, onOpen, onClose }) =>  (
-  <Swipeable
-  rightButtons={[
-    <TouchableHighlight
-      underlayColor='green'
-      onPress={onPress}
-      style={[style.rightSwipeButton, { backgroundColor: '#d4d400' }]}>
-      <Icon
-        name='new-releases'
-        size={28}
-        color='black'
-      />
-    </TouchableHighlight>
-  ]}
-  onRightButtonsOpenRelease={onOpen}
-  onRightButtonsCloseRelease={onClose}
->
+export default ({ item, type }) =>  (
   <View style={[style.view, { 
     backgroundColor: type === 'section' ? 'white' : '#eee', 
     marginTop: type === 'section' ? 5 : 0.5,
     borderTopWidth: type === 'section' ? 1 : 0,
-    borderBottomWidth: type === 'section' ? 0 : 1,
-    borderColor: '#ccc',
+    borderTopColor: '#ccc',
     minHeight: 50
   }]}>
     {
@@ -76,12 +52,15 @@ export default ({ item, type, onPress, onOpen, onClose }) =>  (
 
     <View style={{ flex: 1, flexDirection: 'column' } }>
       <View style={{ flex: 1, flexDirection: 'row', paddingTop: 5 }}>
-        <Icon
-          style={{ paddingTop: 3, paddingRight: 2 }}
-          name='check-circle'
-          size={16}
-          color={ item.state === 'Closed' ? '#1f1' : '#bbb' } />
-          <Text style={style.title}>
+        {
+          item.state === 'Closed' ?
+            <Icon
+              style={{ padding: 3, fontWeight: 'bold' }}
+              name='done'
+              size={16}
+              color='green' /> : <View />
+        }
+        <Text style={style.title}>
           {item.title}
         </Text>
 
@@ -115,5 +94,4 @@ export default ({ item, type, onPress, onOpen, onClose }) =>  (
       </View>
     </View>
   </View>
-  </Swipeable>
 )

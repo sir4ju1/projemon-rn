@@ -3398,7 +3398,7 @@ react-native-drawer-layout@1.3.2:
 
 react-native-file-opener@sir4ju1/react-native-file-opener:
   version "0.2.1"
-  resolved "https://codeload.github.com/sir4ju1/react-native-file-opener/tar.gz/968f1860ef57f7b6d72cea8df2d978844053c1ee"
+  resolved "https://codeload.github.com/sir4ju1/react-native-file-opener/tar.gz/dab6cc346fcb1e1fd6199c80c5039e4f57fff2b1"
 
 react-native-html-to-pdf@^0.4.0:
   version "0.4.0"
@@ -3588,6 +3588,10 @@ readable-stream@~1.1.8, readable-stream@~1.1.9:
     inherits "~2.0.1"
     isarray "0.0.1"
     string_decoder "~0.10.x"
+
+reconnecting-websocket@^3.2.2:
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/reconnecting-websocket/-/reconnecting-websocket-3.2.2.tgz#8097514e926e9855e03c39e76efa2e3d1f371bee"
 
 redux-thunk@^2.2.0:
   version "2.2.0"

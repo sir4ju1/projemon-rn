@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 
 import vsts from '../api/common'
 import WorkItem from '../components/workItemMember'
-import WorkItemSection from '../components/workItemIteration'
+import WorkItemSection from '../components/workItemStatic'
 import _ from 'lodash'
 
 class WorkItemScreen extends React.Component {

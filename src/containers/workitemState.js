@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 
 import vsts from '../api/common'
 import WorkItem from '../components/workItemState'
-import WorkItemSection from '../components/workItemIteration'
+import WorkItemSection from '../components/workItemStatic'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import _ from 'lodash'
 
@@ -21,7 +21,7 @@ class WorkItemScreen extends React.Component {
     drawerLabel: 'Work Items',
     headerTitle: 'Work Items',
     headerRight: (
-      <TouchableHighlight underlayColor='white' activeOpacity={0.5}  style={{ marginRight: 10 }} onPress={() => navigation.navigate('WorkItemCal')}>
+      <TouchableHighlight underlayColor='#0078d7' activeOpacity={0.5}  style={{ marginRight: 10 }} onPress={() => navigation.navigate('WorkItemCal')}>
         <View>
           <Icon
             name='date-range'
@@ -112,7 +112,7 @@ class WorkItemScreen extends React.Component {
       renderItem={({ item, section, index }) => <WorkItem
         item={item}
         type='item'
-        onPress={() => this._onPressItem(item, section, index)}
+        onPress={async () => await this._onPressItem(item, section, index)}
         {...itemProps}
       />}
       renderSectionHeader={({ section, index }) => <WorkItemSection

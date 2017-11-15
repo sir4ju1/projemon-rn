@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, View, Text, TouchableHighlight, ActivityIndicator, AsyncStorage } from 'react-native'
+import { ScrollView, View, Text, TouchableHighlight, ActivityIndicator, AsyncStorage, Alert } from 'react-native'
 import { connect } from 'react-redux'
 
 import _ from 'lodash'
@@ -35,7 +35,9 @@ class ProjectEdit extends React.Component {
       if (result.success) {
         await AsyncStorage.removeItem(`project-stat`)
       }      
-    } catch (error) { }
+    } catch (error) {
+
+     }
     this.setState( { loading: false })
   }
   _onReloadPress = async (id) => {
@@ -47,7 +49,11 @@ class ProjectEdit extends React.Component {
         await AsyncStorage.removeItem(`project-stat`)
       }
     } catch (error) {
-      
+      Alert.alert(
+        'Error',
+        error.message,
+        [{text: 'On', onPress: () => console.log('Cancel Pressed'), style: 'cancel'}]
+      )
     }
     this.setState( { loading: false })
   }
@@ -68,7 +74,11 @@ class ProjectEdit extends React.Component {
         await AsyncStorage.setItem(`p:${this.props.project}`, JSON.stringify(project))
       }
     } catch (error) {
-      
+      Alert.alert(
+        'Error',
+        error.message,
+        [{text: 'On', onPress: () => console.log('Cancel Pressed'), style: 'cancel'}]
+      )
     }
     this.setState( { loading: false })
   }

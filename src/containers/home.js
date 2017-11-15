@@ -22,6 +22,7 @@ class HomeScreen extends React.PureComponent {
   })
   async componentDidMount () {
     try {
+      this.setState({ refreshing: true })
       const projectIds = await AsyncStorage.getItem('project-stat')
       if (projectIds) {
         const ids = JSON.parse(projectIds)
@@ -39,13 +40,13 @@ class HomeScreen extends React.PureComponent {
     } catch (error) {
       console.log(error.message)
     }
+    this.setState({ refreshing: false })
   }
   async componentWillReceiveProps  (next) {
     await this._fetchData()
   }
   _fetchData = async () => {
-    try {
-      this.setState({ refreshing: true })
+    try {      
       const response = await fetch('http://ci.lolobyte.com/api/projects/statistic')
       const result = await response.json()
       if (result.success) {
@@ -56,7 +57,7 @@ class HomeScreen extends React.PureComponent {
           await AsyncStorage.setItem(`p:${element.tfs_id}`, JSON.stringify(element))
         }
         await AsyncStorage.setItem('project-stat', JSON.stringify(ids))
-        this.setState({ data: result.data, refreshing: false })
+        this.setState({ data: result.data })
       }
     } catch (error) {
       
