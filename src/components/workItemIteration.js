@@ -77,7 +77,7 @@ export default ({ item, type, onPress, onOpen, onClose }) =>  (
     <View style={{ flex: 1, flexDirection: 'column' } }>
       <View style={{ flex: 1, flexDirection: 'row', paddingTop: 5 }}>
         <Icon
-          style={{ paddingTop: 1, paddingRight: 2 }}
+          style={{ paddingRight: 2 }}
           name='check-circle'
           size={16}
           color={ item.state === 'Closed' ? 'green' : '#bbb' } />

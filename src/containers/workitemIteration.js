@@ -112,13 +112,12 @@ class WorkItemScreen extends React.Component {
         let items = _.cloneDeep(this.state.data)
         const idx = items.findIndex(i => i._id === section._id)
         items[idx].data[index].isOpt = isOpt
-        this.setState({ data: items })
-        this.currentlyOpenSwipeable.recenter()
+        this.setState({ data: items })        
       }
     } catch (error) {
       console.log(error.message)
     }
-    
+    this.state.currentlyOpenSwipeable.recenter()
   }
   _onPrint = async () => {
     try {
