@@ -73,24 +73,5 @@ const AppNavigator = DrawerNavigator({
     contentComponent: DrawerView,
   }
 )
-// class AppWithNavigationState extends React.Component {
-//   render() {
-//     return (
-//       <AppNavigator navigation={addNavigationHelpers({
-//         dispatch: this.props.dispatch,
-//         state: this.props.nav,
-//       })} />
-//     )
-//   }
-// }
-
-// AppWithNavigationState.PropTypes = {
-//   dispatch: PropTypes.func.isRequired,
-//   nav: PropTypes.object.isRequired
-// }
-// const mapStateToProps = state => ({
-//   app: state.app
-// })
 
 export default AppNavigator
-// export default connect(mapStateToProps)(AppNavigator)

@@ -9,8 +9,8 @@
 	"dependencies": {
 		"moment": "^2.19.1",
 		"prop-types": "^15.6.0",
-		"react": "16.0.0",
-		"react-native": "^0.50.1",
+		"react": "^16.1.1",
+		"react-native": "^0.50.3",
 		"react-native-file-opener": "sir4ju1/react-native-file-opener",
 		"react-native-html-to-pdf": "^0.4.0",
 		"react-native-swipeable": "^0.6.0",

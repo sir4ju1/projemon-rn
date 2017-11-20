@@ -20,11 +20,7 @@ DrawerButton.propTypes = {
 
 const styles = StyleSheet.create({
   buttonStyle: {
-    marginLeft: 10,
-    marginRight: 10
-  },
-  iconStyle: {
-    width: 60
+    marginLeft: 10
   }
 })
 export default DrawerButton

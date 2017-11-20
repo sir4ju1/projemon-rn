@@ -15,17 +15,20 @@ class WorkItemScreen extends React.Component {
       data: []
     }
   }
-  static navigationOptions = () => ({
-    drawerLabel: 'Work Items',
-    headerTitle: 'Work Items',
-  })
+  static navigationOptions = ({navigation}) => {
+    const { params = {} } = navigation.state
+    return {
+      drawerLabel: 'Work Items',
+      headerTitle: <View style={{flex: 1,flexDirection: 'column', paddingTop: 5}}><Text style={{fontSize: 16}} >{params.member}</Text><Text>Task List</Text></View>
+    }
+  }
   async componentWillReceiveProps  (next) {
     await this._fetchData()
   }
   async componentDidMount() {
-    
+    const member = this.props.member
+    this.props.navigation.setParams({ member: member.substring(0, member.indexOf('<')).trim().toUpperCase() })
     const data = await this._fetchData()
-    
   }
   _fetchData = async () => {
     try {
@@ -147,6 +150,7 @@ class WorkItemScreen extends React.Component {
         onScroll={this._handleScroll}
         onRefresh={async () => await this._fetchData() }
         refreshing={this.state.loading}
+        style={{backgroundColor: '#ccc'}}
       />
     )
   }

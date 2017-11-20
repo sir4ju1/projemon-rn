@@ -18,7 +18,7 @@ class WorkItemScreen extends React.Component {
   }
   static navigationOptions = ({navigation}) => ({
     drawerLabel: 'Work Items',
-    headerTitle: 'Work Items',
+    headerTitle: 'Check List',
     headerRight: (
       <TouchableHighlight underlayColor='#0078d7' activeOpacity={0.5}  style={{ marginRight: 10 }} onPress={() => navigation.navigate('WorkItemCal')}>
         <View>
@@ -122,6 +122,7 @@ class WorkItemScreen extends React.Component {
       onScroll={this._handleScroll}
       onRefresh={async () => await this._fetchData()}
       refreshing={this.state.loading}
+      style={{backgroundColor: '#ccc'}}
     />
     )
   }

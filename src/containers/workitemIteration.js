@@ -23,7 +23,7 @@ class WorkItemScreen extends React.Component {
     const { params = {} } = navigation.state
     return {
     drawerLabel: 'Work Items',
-    headerTitle: 'Work Items',
+    headerTitle: <View style={{flex: 1,flexDirection: 'column', paddingTop: 5}}><Text style={{fontSize: 16}} >{params.iteration}</Text><Text>{params.project}</Text></View>,
     headerRight: (
       <TouchableHighlight underlayColor='#0078d7' activeOpacity={0.5}  style={{ marginRight: 10 }}
         onPress={ params.print ? async () => await params.print() : () => null}>
@@ -45,7 +45,7 @@ class WorkItemScreen extends React.Component {
       const project = JSON.parse(item)
       this.setState({ project: project.name })
     }
-    this.props.navigation.setParams({ print: this._onPrint })
+    this.props.navigation.setParams({ project: this.state.project, iteration: this.props.iteration, print: this._onPrint })
     
   }
   async componentWillReceiveProps  (next) {
@@ -127,11 +127,11 @@ class WorkItemScreen extends React.Component {
         <h3>${this.props.iteration}</h3>
       </div><div style="font-size: 16px;">`
       this.state.data.forEach((us, index) => {
-        elements += `<div style="font-size: 14px; padding: 5px 0;"><strong>${index+1}. ${us.title}</strong><div>`
+        elements += `<div style="font-size: 14px; padding: 5px 0;"><strong>${index+1}. ${us.title}</strong><ol>`
         us.data.forEach((task, idx)=> {
-          elements += `<div style="padding-left:20px;">${idx+1}. ${task.title} <span style="padding-left: 10px; font-weight: 600">(${task.state})  ${task.isOpt ? '(Extra)': ''}</span></div>`
+          elements += `<li>${task.title} <span style="padding-left: 10px; font-weight: 600">(${task.state})  ${task.isOpt ? '(Extra)': ''}</span></li>`
         })
-        elements += '</div></div>'
+        elements += '</ol></div>'
       })
       elements += '</div></div>'
       // Pdf options
@@ -198,6 +198,7 @@ class WorkItemScreen extends React.Component {
         />}
         sections={this.state.data}
         onScroll={this._handleScroll}
+        style={{backgroundColor: '#ccc'}}
       />
     )
   }

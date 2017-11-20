@@ -73,11 +73,11 @@ class WorkItemScreen extends React.Component {
           <h3>${item._id}</h3>
         </div><div style="font-size: 16px;">`
         result.data.forEach((us, index) => {
-          elements += `<div style="padding: 5px 0;"><strong>${index+1}. ${us.title}</strong><div>`
+          elements += `<div style="padding: 5px 0;"><strong>${index+1}. ${us.title}</strong><ol>`
           us.data.forEach((task, idx)=> {
-            elements += `<div style="padding-left:20px;">${idx+1}. ${task.title} <span style="padding-left: 10px;"> ${task.isOpt ? '(Extra)': ''}</span></div>`
+            elements += `<li>${task.title} <span style="padding-left: 10px;"> ${task.isOpt ? '(Extra)': ''}</span></li>`
           })
-          elements += '</div></div>'
+          elements += '</ol></div>'
         })
         elements += '</div></div>'
         // Pdf options
@@ -136,6 +136,7 @@ class WorkItemScreen extends React.Component {
       )}
       onRefresh={async () => await this._fetchData()}
       refreshing={this.state.loading}
+      style={{backgroundColor: '#ccc'}}
     />
     )
   }
